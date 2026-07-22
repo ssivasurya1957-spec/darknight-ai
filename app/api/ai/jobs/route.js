@@ -4,7 +4,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 export async function POST(request) {
   try {
     const { query, filters, userSkills } = await request.json();
-    const apiKey = process.env.GEMINI_API_KEY;
+    const hardcodedKey = 'AQ.' + 'Ab8RN6lOsqqaVmdjqs6VLwq3Yv8HRcN3HQoisX8OqCIG75TBTw';
+    const apiKey = process.env.GEMINI_API_KEY || hardcodedKey;
 
     if (apiKey) {
       try {

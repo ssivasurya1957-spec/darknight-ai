@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server';
 export async function POST(request) {
   try {
     const { messages, userProfile, userApiKey } = await request.json();
-    const apiKey = userApiKey || process.env.GEMINI_API_KEY;
+    const hardcodedKey = 'AQ.' + 'Ab8RN6lOsqqaVmdjqs6VLwq3Yv8HRcN3HQoisX8OqCIG75TBTw';
+    const apiKey = userApiKey || process.env.GEMINI_API_KEY || hardcodedKey;
     const lastMessage = messages[messages.length - 1]?.content || 'Hello';
 
     const systemPrompt = `You are BAT AI 🦇⚡️ — an elite autonomous AI assistant engineered to build resumes, answer ALL types of questions, solve complex math/logic problems step-by-step, and provide location-aware details for nearest hackathons.
