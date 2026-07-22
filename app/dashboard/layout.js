@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '@/components/Sidebar';
 import ParticleBackground from '@/components/ParticleBackground';
-import FloatingChatbot from '@/components/FloatingChatbot';
 import OnboardingModal from '@/components/OnboardingModal';
 import AgentConsole from '@/components/AgentConsole';
+import BattyChatbotWidget from '@/components/BattyChatbotWidget';
 
 export default function DashboardLayout({ children }) {
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -20,19 +20,19 @@ export default function DashboardLayout({ children }) {
   }, []);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', position: 'relative', backgroundColor: '#040406' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', position: 'relative', backgroundColor: 'var(--bg)' }}>
       <ParticleBackground />
       <Sidebar />
-      <FloatingChatbot />
+      <BattyChatbotWidget />
       <OnboardingModal isOpen={showOnboarding} onClose={() => setShowOnboarding(false)} />
       
       <div style={{
         position: 'fixed',
         top: 0,
         right: 0,
-        width: '500px',
-        height: '500px',
-        background: 'radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.08) 0%, rgba(13, 13, 18, 0) 70%)',
+        width: '600px',
+        height: '600px',
+        background: 'radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.08) 0%, rgba(255, 42, 95, 0.04) 50%, rgba(3, 2, 6, 0) 70%)',
         pointerEvents: 'none',
         zIndex: 1,
       }} />

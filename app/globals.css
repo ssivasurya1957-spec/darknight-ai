@@ -1,56 +1,36 @@
 /* 1. IMPORTS & FONTS */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
 
 @import "tailwindcss";
 
-/* 2. CSS CUSTOM PROPERTIES — CUTE MUSHY BATMAN THEME 🦇✨ */
+/* 2. ULTIMATE 3D BATMAN PALETTE & DESIGN SYSTEM 🦇⚡️ */
 :root {
-  /* Cute Dark Knight Batcave Palette */
-  --bg: #06050a;
-  --surface: #0e0c14;
-  --card: #15131f;
-  --card-hover: #1c1929;
+  /* Obsidian Batcave Palette */
+  --bg: #030206;
+  --surface: #0b0a12;
+  --card: #14121e;
+  --card-top: #1b1828;
+  --card-bottom: #0f0d18;
   
-  /* Primary Metallic Gold & Cute Rose Gold Accents */
-  --primary: #F4C430;
-  --primary-hover: #FFD700;
-  --primary-glow: rgba(244, 196, 48, 0.3);
+  /* 3D Metallic Cyber Gold & Gotham Accents */
+  --gold-primary: #FFD700;
+  --gold-metallic: #D4AF37;
+  --gold-dark: #8B7500;
+  --gold-glow: rgba(255, 215, 0, 0.4);
   
-  /* Cute Mushy Pink/Purple/Golden Accents */
-  --accent-pink: #FF85A1;
-  --accent-purple: #B5179E;
-  --accent-gold: #FFD166;
-  --accent-glow: rgba(255, 133, 161, 0.25);
+  /* Batman Gotham Accents */
+  --bat-crimson: #FF2A5F;
+  --bat-violet: #9D4EDD;
+  --bat-cyan: #00F5FF;
+  --bat-emerald: #10B981;
   
-  --success: #10B981;
-  --danger: #FF4D6D;
-  --warning: #F59E0B;
-  
-  --border: rgba(244, 196, 48, 0.22);
-  --border-glow: rgba(255, 133, 161, 0.4);
-  
-  --text-primary: #FFF0F5;
-  --text-secondary: #D4C3DA;
-  --text-muted: #8E7A99;
-  
-  --glass: rgba(14, 12, 20, 0.88);
-  --glass-heavy: rgba(10, 8, 15, 0.96);
-  --glass-border: rgba(244, 196, 48, 0.25);
-  
-  /* Cute Soft Rounded Borders & Plush Shadows */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.7);
-  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.85);
-  --shadow-glow: 0 0 30px rgba(244, 196, 48, 0.25);
-  --shadow-cute: 0 0 25px rgba(255, 133, 161, 0.2);
+  /* Text */
+  --text-primary: #FFF8E7;
+  --text-secondary: #C8B9D6;
+  --text-muted: #7E6C8F;
   
   /* Typography */
-  --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
   --font-display: 'Cinzel', serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
@@ -62,97 +42,134 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
   background-image: 
-    radial-gradient(circle at 15% 15%, rgba(244, 196, 48, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 85% 85%, rgba(255, 133, 161, 0.04) 0%, transparent 40%);
+    radial-gradient(ellipse at 50% 0%, rgba(255, 215, 0, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 90%, rgba(255, 42, 95, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 15% 70%, rgba(157, 78, 221, 0.06) 0%, transparent 50%);
 }
 
-/* Cute Floating Animations */
-@keyframes float-cute {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-6px) rotate(2deg); }
+/* 3D Extruded Tactile Card */
+.bat-3d-card {
+  background: linear-gradient(145deg, #191626 0%, #0d0c15 100%);
+  border: 1px solid rgba(255, 215, 0, 0.28);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 
+    0 10px 0 #05040a,
+    0 15px 30px rgba(0, 0, 0, 0.9),
+    0 0 25px rgba(255, 215, 0, 0.12);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
 }
 
-@keyframes pulse-cute {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.05); opacity: 0.85; }
+.bat-3d-card:hover {
+  transform: translateY(-6px) scale(1.015);
+  border-color: var(--gold-primary);
+  box-shadow: 
+    0 16px 0 #05040a,
+    0 25px 40px rgba(0, 0, 0, 0.95),
+    0 0 35px rgba(255, 215, 0, 0.35);
 }
 
-@keyframes bat-wings {
-  0%, 100% { transform: scaleX(1); }
-  50% { transform: scaleX(1.1); }
+/* 3D Tactile Gold Button */
+.bat-3d-button {
+  background: linear-gradient(180deg, #FFE45C 0%, #D4AF37 50%, #B8960C 100%);
+  color: #000000;
+  font-family: var(--font-mono);
+  font-weight: 900;
+  border: none;
+  border-bottom: 4px solid #735D00;
+  border-radius: 14px;
+  box-shadow: 
+    0 6px 0 #3A2F00,
+    0 10px 20px rgba(255, 215, 0, 0.3);
+  transition: all 0.15s ease;
+  cursor: pointer;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
-.cute-float {
-  animation: float-cute 4s ease-in-out infinite;
+.bat-3d-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 0 #3A2F00,
+    0 14px 25px rgba(255, 215, 0, 0.5);
+  filter: brightness(1.08);
 }
 
-.cute-pulse {
-  animation: pulse-cute 2.5s ease-in-out infinite;
+.bat-3d-button:active {
+  transform: translateY(4px);
+  border-bottom-width: 1px;
+  box-shadow: 
+    0 2px 0 #3A2F00,
+    0 4px 10px rgba(255, 215, 0, 0.2);
 }
 
-.cute-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: var(--shadow-sm);
+/* 3D Crimson Button */
+.bat-3d-crimson {
+  background: linear-gradient(180deg, #FF5983 0%, #FF2A5F 50%, #C4103B 100%);
+  color: #FFFFFF;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  border: none;
+  border-bottom: 4px solid #7A001E;
+  border-radius: 14px;
+  box-shadow: 
+    0 6px 0 #420010,
+    0 10px 20px rgba(255, 42, 95, 0.3);
+  transition: all 0.15s ease;
+  cursor: pointer;
 }
 
-.cute-card:hover {
-  transform: translateY(-4px) scale(1.01);
-  border-color: var(--primary);
-  box-shadow: var(--shadow-glow), var(--shadow-cute);
+.bat-3d-crimson:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 0 #420010,
+    0 14px 25px rgba(255, 42, 95, 0.5);
 }
 
-.cute-badge {
+/* 3D Floating Pill Badge */
+.bat-3d-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
   border-radius: 30px;
   font-size: 0.75rem;
-  font-weight: 700;
-  font-family: var(--font-mono);
-  background: rgba(244, 196, 48, 0.12);
-  border: 1px solid rgba(244, 196, 48, 0.3);
-  color: var(--primary);
-}
-
-.cute-badge-pink {
-  background: rgba(255, 133, 161, 0.15);
-  border: 1px solid rgba(255, 133, 161, 0.4);
-  color: var(--accent-pink);
-}
-
-.cute-button-gold {
-  background: linear-gradient(135deg, #F4C430 0%, #FFD700 100%);
-  color: #000000;
   font-weight: 800;
-  border-radius: var(--radius-md);
-  box-shadow: 0 0 20px rgba(244, 196, 48, 0.35);
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-family: var(--font-mono);
+  background: linear-gradient(145deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05));
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-bottom: 3px solid rgba(255, 215, 0, 0.5);
+  color: var(--gold-primary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 15px rgba(255, 215, 0, 0.2);
 }
 
-.cute-button-gold:hover {
-  transform: scale(1.04);
-  box-shadow: 0 0 30px rgba(244, 196, 48, 0.5);
+/* 3D Metallic Gold Text Gradient */
+.bat-gold-text {
+  background: linear-gradient(135deg, #FFF0B3 0%, #FFD700 50%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.3));
 }
 
-/* Custom Cute Scrollbar */
+/* 3D Floating Particle Animation */
+@keyframes bat-float-3d {
+  0%, 100% { transform: translateY(0px) rotate3d(1, 1, 0, 0deg); }
+  50% { transform: translateY(-8px) rotate3d(1, 1, 0, 4deg); }
+}
+
+.bat-3d-float {
+  animation: bat-float-3d 3.5s ease-in-out infinite;
+}
+
+/* Custom 3D Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #06050a;
+  background: #030206;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgba(244, 196, 48, 0.25);
+  background: linear-gradient(180deg, #FFD700, #8B7500);
   border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 133, 161, 0.5);
+  border: 2px solid #030206;
 }
