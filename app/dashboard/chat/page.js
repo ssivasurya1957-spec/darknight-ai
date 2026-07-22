@@ -114,6 +114,7 @@ export default function ChatPage() {
         interests: interests,
       };
 
+      const savedKey = localStorage.getItem('gemini_api_key') || '';
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -123,6 +124,7 @@ export default function ChatPage() {
             content: m.content,
           })),
           userProfile: profile,
+          userApiKey: savedKey,
         }),
       });
 
