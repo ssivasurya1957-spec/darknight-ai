@@ -46,7 +46,13 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           style={{ background: '#0a0a0f', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '24px', padding: '32px', maxWidth: '540px', width: '100%', boxShadow: '0 24px 80px rgba(0,0,0,0.9), 0 0 40px rgba(212,175,55,0.1)' }}
         >
-          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '24px', position: 'relative' }}>
+            <button
+              onClick={onClose}
+              style={{ position: 'absolute', top: '-10px', right: '-10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text-secondary)', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}
+            >
+              ✕
+            </button>
             <div style={{ display: 'inline-flex', padding: '8px 16px', borderRadius: '20px', background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.3)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginBottom: '12px' }}>
               <Sparkles size={14} style={{ marginRight: '6px' }} /> PERSONALIZATION ONBOARDING
             </div>
