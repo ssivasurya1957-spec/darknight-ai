@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { LayoutDashboard, TrendingUp, Clock, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
 import GlassCard from '@/components/GlassCard';
@@ -9,10 +10,15 @@ import { opportunities as mockOpportunities, stats as mockStats } from '@/lib/mo
 import Link from 'next/link';
 
 export default function DashboardPage() {
-  const [userName, setUserName] = useState('ALEX CHEN');
+  const { data: session } = useSession();
+  const [userName, setUserName] = useState('USER');
 
   useEffect(() => {
     try {
+      if (session?.user?.name) {
+        setUserName(session.user.name.toUpperCase());
+        return;
+      }
       const stored = localStorage.getItem('darknight_user');
       if (stored) {
         const parsed = JSON.parse(stored);
@@ -21,7 +27,7 @@ export default function DashboardPage() {
     } catch (e) {
       console.error(e);
     }
-  }, []);
+  }, [session]);
 
   const containerVariants = {
     hidden: { opacity: 0 },

@@ -1,25 +1,21 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   ArrowLeft, MapPin, Calendar, IndianRupee, Tag, 
-  Bookmark, Share2, Sparkles, Building2
+  Bookmark, Share2, Sparkles, Building2, ExternalLink 
 } from 'lucide-react';
 import { opportunities } from '@/lib/mockData';
 import Badge from '@/components/Badge';
 import GlassCard from '@/components/GlassCard';
 import OpportunityCard from '@/components/OpportunityCard';
-import EmailVerificationModal from '@/components/EmailVerificationModal';
 
 export default function OpportunityDetailPage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id;
-  
-  const [showApplyModal, setShowApplyModal] = useState(false);
-  const [applyPreviewUrl, setApplyPreviewUrl] = useState(null);
   
   const opportunity = opportunities.find(op => op.id === id);
 
@@ -66,13 +62,6 @@ export default function OpportunityDetailPage() {
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className="min-h-screen p-8 max-w-5xl mx-auto pb-24"
     >
-      <EmailVerificationModal
-        isOpen={showApplyModal}
-        onClose={() => setShowApplyModal(false)}
-        userEmail="alex.chen@university.edu"
-        previewUrl={applyPreviewUrl}
-        onVerified={() => window.open(opportunity.link, '_blank')}
-      />
       <button 
         onClick={() => router.back()}
         className="flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-8 group"
@@ -116,7 +105,7 @@ export default function OpportunityDetailPage() {
                 <div className="text-[10px] uppercase font-mono text-[var(--text-secondary)] tracking-wider mb-1">Deadline</div>
                 <div className="text-[var(--text-primary)]">
                   {new Date(opportunity.deadline).toLocaleDateString()} 
-                  <span className="text-[var(--danger)] ml-2 text-sm">({opportunity.daysLeft} days left)</span>
+                  <span className="text-[var(--danger)] ml-2 text-sm">({opportunity.daysLeft || 10} days left)</span>
                 </div>
               </div>
             </div>
@@ -125,8 +114,8 @@ export default function OpportunityDetailPage() {
                 <IndianRupee className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-[10px] uppercase font-mono text-[var(--text-secondary)] tracking-wider mb-1">Stipend / Prize</div>
-                <div className="text-[var(--text-primary)]">{opportunity.stipend || 'Unpaid'}</div>
+                <div className="text-[10px] uppercase font-mono text-[var(--text-secondary)] tracking-wider mb-1">Stipend / Salary</div>
+                <div className="text-[var(--text-primary)]">{opportunity.stipend || 'Competitive'}</div>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -161,32 +150,15 @@ export default function OpportunityDetailPage() {
 
         <div className="w-full lg:w-[340px] flex flex-col gap-6">
           <GlassCard className="p-6 flex flex-col gap-4" hover={false}>
-            <button 
-              onClick={async () => {
-                setShowApplyModal(true);
-                try {
-                  const res = await fetch('/api/notifications/email', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      title: `Application Submitted: ${opportunity.title}`,
-                      message: `You applied for ${opportunity.title} at ${opportunity.organization}. We'll notify you when there's an update!`,
-                      opportunityTitle: `${opportunity.title} (${opportunity.organization})`,
-                      opportunityLink: opportunity.link
-                    })
-                  });
-                  const data = await res.json();
-                  if (data.details?.previewUrl) {
-                    setApplyPreviewUrl(data.details.previewUrl);
-                  }
-                } catch (err) {
-                  console.error(err);
-                }
-              }}
-              className="w-full text-center py-4 bg-[var(--primary)] hover:bg-blue-600 text-white rounded-xl font-medium transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] flex items-center justify-center gap-2"
+            <a 
+              href={opportunity.link || '#'}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full text-center py-4 bg-[var(--primary)] hover:bg-blue-600 text-white rounded-xl font-medium transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] flex items-center justify-center gap-2 text-decoration-none"
             >
-              <span>Apply Now & Verify</span>
-            </button>
+              <span>Apply Directly</span>
+              <ExternalLink size={16} />
+            </a>
             <div className="grid grid-cols-2 gap-4">
               <button className="flex items-center justify-center gap-2 py-3 border border-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.05)] text-[var(--text-primary)] rounded-xl transition-colors">
                 <Bookmark className="w-4 h-4" />
