@@ -41,11 +41,24 @@ Tone: Powerful, intelligent, encouraging, clear, with a subtle Batcave assistant
         }))
       ];
 
+      // Support for both legacy AIzaSy... API keys and new AQ... Auth API Keys
       for (const modelName of modelsToTry) {
         try {
-          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
+          const isAqKey = apiKey.startsWith('AQ.');
+          
+          // If it's an AQ... key, sometimes it needs Bearer token, otherwise standard x-goog-api-key
+          const headers = { 
+            'Content-Type': 'application/json',
+            'x-goog-api-key': apiKey
+          };
+          
+          if (isAqKey) {
+            headers['Authorization'] = `Bearer ${apiKey}`;
+          }
+
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent${!isAqKey ? `?key=${apiKey}` : ''}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
             body: JSON.stringify({
               contents: formattedContents,
               generationConfig: {
@@ -67,7 +80,7 @@ Tone: Powerful, intelligent, encouraging, clear, with a subtle Batcave assistant
       }
     }
 
-    // 2. BAT AI Autonomous Reasoning & Problem Solving Engine
+    // 2. BAT AI Autonomous Reasoning & Problem Solving Engine (Fallback)
     const q = lastMessage.toLowerCase();
     let reply = `🦇⚡️ **BAT AI Autonomous Engine**\n\n`;
 

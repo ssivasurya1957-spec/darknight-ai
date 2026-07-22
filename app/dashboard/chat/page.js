@@ -1,20 +1,20 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowUp, Bot, Trash2, Sparkles, RefreshCw, User, Calculator, FileText, MapPin, Code2, Globe } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUp, Bot, Trash2, Sparkles, RefreshCw, User, Key, Check, X, Code2, Globe } from 'lucide-react';
 
 const CHATGPT_PROMPTS = [
-  { label: '🧮 Solve Math & Logic', prompt: 'Solve this math problem step by step: Evaluate derivative of f(x) = x^3 * sin(x)' },
-  { label: '📄 Build ATS Resume', prompt: 'Build me a 1-page ATS optimized resume for a Software Engineer role at Google.' },
-  { label: '📍 Nearest Hackathons', prompt: 'Where is the nearest hackathon venue located near my city? Show location details and directions.' },
+  { label: '🧮 Solve Math & Calculus', prompt: 'Solve this math problem step by step: Evaluate integral of x^2 * e^x dx' },
+  { label: '📄 Build ATS Resume', prompt: 'Build me a 1-page ATS optimized resume for a Full Stack Software Engineer at Google.' },
+  { label: '📍 Nearest Hackathon', prompt: 'What are the nearest hackathon venue locations near my city with Google Maps directions?' },
   { label: '💻 Write Python Script', prompt: 'Write an optimized Python script for a binary search tree with O(log N) operations.' },
-  { label: '💰 Salary Benchmarks', prompt: 'What is the standard salary package for a Machine Learning Engineer in India and US?' },
+  { label: '💡 General Knowledge Q', prompt: 'Explain quantum entanglement in simple terms for a beginner.' },
 ];
 
 function MarkdownText({ text }) {
   const html = text
-    .replace(/```([\s\S]*?)```/g, '<pre style="background:#090614;padding:12px;border-radius:12px;border:1px solid rgba(255,0,127,0.3);font-family:monospace;font-size:0.85em;overflow-x:auto;color:#00F5FF;margin:8px 0"><code>$1</code></pre>')
+    .replace(/```([\s\S]*?)```/g, '<pre style="background:#090614;padding:14px;border-radius:12px;border:1px solid rgba(0,245,255,0.3);font-family:monospace;font-size:0.85em;overflow-x:auto;color:#00F5FF;margin:10px 0"><code>$1</code></pre>')
     .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#FFF0F5">$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/`(.*?)`/g, '<code style="background:rgba(255,0,127,0.15);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:0.85em;color:#FFD700">$1</code>')
@@ -33,6 +33,10 @@ export default function ChatPage() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const [showKeyModal, setShowKeyModal] = useState(false);
+  const [customKey, setCustomKey] = useState('');
+  const [keySaved, setKeySaved] = useState(false);
+
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
 
@@ -43,6 +47,9 @@ export default function ChatPage() {
       const stored = localStorage.getItem('darknight_user');
       if (stored) setUserProfile(JSON.parse(stored));
 
+      const existingKey = localStorage.getItem('gemini_api_key') || '';
+      setCustomKey(existingKey);
+
       const savedMsgs = localStorage.getItem(CHAT_STORAGE_KEY);
       if (savedMsgs) {
         setMessages(JSON.parse(savedMsgs).slice(-80));
@@ -50,7 +57,7 @@ export default function ChatPage() {
         setMessages([{
           id: 'welcome',
           role: 'ai',
-          content: `🦇⚡️ **Welcome to BAT AI (ChatGPT & Gemini Engine)**\n\nI am **BAT AI** — your universal AI chatbot assistant. Ask me anything on any topic!\n\n• 🧮 **Math & Calculus Problem Solving** (Step-by-step reasoning)\n• 📄 **1-Click ATS Resume Building & PDF Export**\n• 📍 **Nearest Hackathon Location Details & Directions**\n• 💻 **Code Generation, Debugging & System Architecture**\n• 💰 **Live Salary Benchmarks & Career Coaching**\n\n*How can BAT AI empower you today?* 💖`,
+          content: `🦇⚡️ **Welcome to BAT AI (Universal Chatbot)**\n\nI am **BAT AI** — your universal AI assistant. Ask me ANY question on ANY topic!\n\n• 🧮 **Math & Calculus Problem Solving**\n• 📄 **1-Click ATS Resume Building**\n• 📍 **Nearest Hackathon Location Details & Navigation**\n• 💻 **Code Generation & Technical Debugging**\n• 🌐 **General Knowledge, Science & Learning**\n\n*Type your question below!* 💖`,
           timestamp: new Date().toISOString(),
         }]);
       }
@@ -73,6 +80,17 @@ export default function ChatPage() {
     }
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const saveApiKey = () => {
+    if (customKey.trim()) {
+      localStorage.setItem('gemini_api_key', customKey.trim());
+      setKeySaved(true);
+      setTimeout(() => { setKeySaved(false); setShowKeyModal(false); }, 1200);
+    } else {
+      localStorage.removeItem('gemini_api_key');
+      setShowKeyModal(false);
+    }
+  };
 
   const sendMessage = useCallback(async (text) => {
     if (!text.trim() || isTyping) return;
@@ -106,7 +124,7 @@ export default function ChatPage() {
       const aiMsg = {
         id: `ai-${Date.now()}`,
         role: 'ai',
-        content: data.reply || `🦇⚡️ **BAT AI**: Active! Ask me math, resumes, hackathons, or code!`,
+        content: data.reply || `🦇⚡️ **BAT AI**: Ready! Ask me math equations, code, resumes, or any topic!`,
         timestamp: new Date().toISOString(),
       };
 
@@ -116,7 +134,7 @@ export default function ChatPage() {
       setMessages(prev => [...prev, {
         id: `ai-${Date.now()}`,
         role: 'ai',
-        content: `🦇⚡️ **BAT AI**: Ready! Ask me any question, math equation, or resume build!`,
+        content: `🦇⚡️ **BAT AI**: Ready! Ask me any question on any topic!`,
         timestamp: new Date().toISOString(),
       }]);
     } finally {
@@ -129,7 +147,7 @@ export default function ChatPage() {
     setMessages([{
       id: 'welcome',
       role: 'ai',
-      content: `🦇⚡️ **BAT AI Active!** Ask me any question, math problem, resume build, or hackathon location! 💖`,
+      content: `🦇⚡️ **BAT AI Active!** Ask me any question on any topic! 💖`,
       timestamp: new Date().toISOString(),
     }]);
   };
@@ -137,28 +155,70 @@ export default function ChatPage() {
   return (
     <div style={{ maxWidth: '960px', margin: '0 auto', height: 'calc(100vh - 120px)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
       
-      {/* ChatGPT / Gemini Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'rgba(18,12,35,0.9)', border: '1px solid rgba(255,0,127,0.3)', borderRadius: '16px', marginBottom: '16px', backdropFilter: 'blur(12px)' }}>
+      {/* ChatGPT Style Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'rgba(18,12,35,0.9)', border: '1px solid rgba(255,0,127,0.3)', borderRadius: '16px', marginBottom: '16px', backdropFilter: 'blur(12px)', flexWrap: 'wrap', gap: '8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF007F, #FFD700)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', boxShadow: '0 0 15px rgba(255,0,127,0.5)' }}>
+          <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF007F, #FFD700)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', boxShadow: '0 0 15px rgba(255,0,127,0.5)' }}>
             🦇⚡️
           </div>
           <div>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 900, color: '#FFF', margin: 0 }}>
-              BAT AI <span style={{ fontSize: '0.72rem', color: '#FFD700', fontWeight: 700 }}>(ChatGPT & Gemini Engine)</span>
+              BAT AI <span style={{ fontSize: '0.72rem', color: '#FFD700', fontWeight: 700 }}>(Universal AI Chatbot)</span>
             </h1>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: '#00F090' }}>
-              <span>● GPT-4o & Gemini 2.5 Active</span>
+              <span>● Universal Answering Active</span>
               <span style={{ color: 'rgba(255,255,255,0.2)' }}>|</span>
-              <span style={{ color: '#00F5FF' }}>Resumes · Math · Hackathons · All Qs</span>
+              <span style={{ color: '#00F5FF' }}>Ask Any Question</span>
             </div>
           </div>
         </div>
 
-        <button onClick={clearChat} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '10px', border: '1px solid rgba(255,0,127,0.3)', background: 'rgba(255,0,127,0.1)', color: '#FF007F', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', cursor: 'pointer', fontWeight: 700 }}>
-          <Trash2 size={13} /> Clear Chat
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button
+            onClick={() => setShowKeyModal(true)}
+            className="vibrant-badge-gold cursor-pointer"
+            style={{ fontSize: '0.72rem', padding: '6px 12px' }}
+          >
+            <Key size={13} /> {customKey ? 'Key Active ✓' : 'Add Custom API Key'}
+          </button>
+
+          <button onClick={clearChat} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '10px', border: '1px solid rgba(255,0,127,0.3)', background: 'rgba(255,0,127,0.1)', color: '#FF007F', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', cursor: 'pointer', fontWeight: 700 }}>
+            <Trash2 size={13} /> Clear Chat
+          </button>
+        </div>
       </div>
+
+      {/* API Key Modal */}
+      <AnimatePresence>
+        {showKeyModal && (
+          <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} style={{ background: '#120c23', border: '2px solid rgba(255,0,127,0.4)', borderRadius: '20px', padding: '24px', maxWidth: '440px', width: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.9)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#FFF', fontFamily: 'var(--font-display)' }}>
+                  🔑 Custom Google Gemini API Key
+                </h3>
+                <button onClick={() => setShowKeyModal(false)} style={{ background: 'transparent', border: 'none', color: '#FF007F', cursor: 'pointer' }}><X size={18} /></button>
+              </div>
+
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', marginBottom: '14px' }}>
+                BAT AI works out-of-the-box! But if you have your own API Key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" style={{ color: '#FFD700' }}>Google AI Studio</a> (<code style={{ color: '#00F5FF' }}>AIzaSy...</code>), paste it below:
+              </p>
+
+              <input
+                type="password"
+                value={customKey}
+                onChange={e => setCustomKey(e.target.value)}
+                placeholder="AIzaSy..."
+                style={{ width: '100%', padding: '12px', borderRadius: '12px', border: '1px solid rgba(255,0,127,0.3)', background: 'rgba(255,255,255,0.04)', color: '#fff', fontSize: '0.88rem', outline: 'none', fontFamily: 'var(--font-mono)', marginBottom: '16px' }}
+              />
+
+              <button onClick={saveApiKey} className="vibrant-btn-pink" style={{ width: '100%', padding: '12px', borderRadius: '12px', fontSize: '0.88rem' }}>
+                {keySaved ? '✓ Saved Successfully!' : 'Save Key'}
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Conversation Thread */}
       <div style={{ flex: 1, overflowY: 'auto', paddingRight: '8px', display: 'flex', flexDirection: 'column', gap: '16px', paddingBottom: '140px' }}>
@@ -208,7 +268,7 @@ export default function ChatPage() {
               🦇
             </div>
             <div style={{ padding: '10px 16px', borderRadius: '16px', background: 'rgba(24,18,43,0.9)', border: '1px solid rgba(255,0,127,0.3)', color: '#FFD700', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <RefreshCw size={14} style={{ animation: 'spin 1s linear infinite' }} /> BAT AI is generating response...
+              <RefreshCw size={14} style={{ animation: 'spin 1s linear infinite' }} /> BAT AI is generating answer...
             </div>
           </div>
         )}
@@ -246,7 +306,7 @@ export default function ChatPage() {
                 sendMessage(input);
               }
             }}
-            placeholder="Ask BAT AI math equations, resume builds, nearest hackathon locations, code, or any topic..."
+            placeholder="Ask BAT AI any question on any topic (coding, math, science, resumes, hackathons)..."
             rows={1}
             style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#FFF', fontFamily: 'inherit', fontSize: '0.92rem', resize: 'none', minHeight: '48px', maxHeight: '140px', padding: '10px 0', lineHeight: 1.5 }}
           />
@@ -267,7 +327,7 @@ export default function ChatPage() {
           </button>
         </div>
         <p style={{ textAlign: 'center', fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginTop: '8px' }}>
-          BAT AI (ChatGPT & Gemini Engine) · Resumes · Math · Hackathons · All Topics
+          BAT AI (ChatGPT & Gemini Engine) · Pure Universal Question Answering
         </p>
       </div>
 
