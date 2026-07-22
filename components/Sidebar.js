@@ -21,7 +21,7 @@ export default function Sidebar() {
     { icon: BookOpen, label: 'RESEARCH', href: '/dashboard/research' },
     { icon: MessageSquare, label: 'AI CHAT', href: '/dashboard/chat' },
     { icon: FileText, label: 'RESUME', href: '/dashboard/resume' },
-    { icon: Bell, label: 'NOTIFICATIONS', href: '/dashboard/notifications' },
+    { icon: Bell, label: 'ALERTS', href: '/dashboard/notifications' },
   ];
 
   const bottomItems = [
@@ -44,10 +44,10 @@ export default function Sidebar() {
           justifyContent: 'center',
           padding: '8px 0',
           margin: '0 auto',
-          borderRadius: '10px',
-          backgroundColor: isActive ? 'rgba(212, 175, 55, 0.12)' : 'transparent',
-          border: isActive ? '1px solid rgba(212, 175, 55, 0.35)' : '1px solid transparent',
-          boxShadow: isActive ? '0 0 15px rgba(212, 175, 55, 0.15)' : 'none',
+          borderRadius: '12px',
+          backgroundColor: isActive ? 'rgba(255, 0, 127, 0.15)' : 'transparent',
+          border: isActive ? '1px solid rgba(255, 0, 127, 0.4)' : '1px solid transparent',
+          boxShadow: isActive ? '0 0 20px rgba(255, 0, 127, 0.25)' : 'none',
           transition: 'all 250ms ease',
         }}>
           {isActive && (
@@ -58,32 +58,32 @@ export default function Sidebar() {
                 left: 0,
                 top: '50%',
                 transform: 'translateY(-50%)',
-                width: '3px',
+                width: '4px',
                 height: '24px',
-                backgroundColor: 'var(--primary)',
+                background: 'linear-gradient(180deg, #FF007F, #00F5FF)',
                 borderTopRightRadius: '4px',
                 borderBottomRightRadius: '4px',
-                boxShadow: '0 0 10px var(--primary)',
+                boxShadow: '0 0 12px #FF007F',
               }}
               initial={false}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             />
           )}
           <Icon 
-            size={18} 
-            strokeWidth={1.5}
+            size={19} 
+            strokeWidth={2}
             style={{
-              color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
+              color: isActive ? '#FF007F' : 'var(--text-secondary)',
               marginBottom: '3px',
               transition: 'color 250ms ease',
             }}
           />
           <span style={{
-            fontSize: '0.55rem',
+            fontSize: '0.58rem',
             fontFamily: 'var(--font-mono)',
-            fontWeight: 600,
+            fontWeight: 700,
             letterSpacing: '0.05em',
-            color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
+            color: isActive ? '#FFD700' : 'var(--text-secondary)',
             textAlign: 'center',
           }}>
             {item.label}
@@ -102,31 +102,33 @@ export default function Sidebar() {
         left: 0,
         top: 0,
         bottom: 0,
-        backgroundColor: 'rgba(8, 8, 12, 0.95)',
+        backgroundColor: 'rgba(12, 9, 24, 0.95)',
         backdropFilter: 'blur(40px)',
         WebkitBackdropFilter: 'blur(40px)',
-        borderRight: '1px solid rgba(212, 175, 55, 0.2)',
+        borderRight: '1px solid rgba(255, 0, 127, 0.25)',
         zIndex: 40,
         padding: '20px 6px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
       }} className="hidden md:flex">
-        {/* BK Logo */}
+        {/* Colorful Bat Logo */}
         <div style={{ height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
           <Link href="/dashboard" style={{ textDecoration: 'none' }}>
             <div style={{
               fontFamily: 'var(--font-display)',
               fontWeight: 900,
-              fontSize: '1.6rem',
-              color: '#D4AF37',
+              fontSize: '1.7rem',
+              background: 'linear-gradient(135deg, #FF007F 0%, #FFD700 50%, #00F5FF 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
               letterSpacing: '-0.02em',
-              textShadow: '0 0 15px rgba(212, 175, 55, 0.4)',
+              filter: 'drop-shadow(0 0 10px rgba(255, 0, 127, 0.5))',
               display: 'flex',
               alignItems: 'center',
               gap: '2px',
             }}>
-              BK
+              🦇✨
             </div>
           </Link>
         </div>
@@ -135,7 +137,7 @@ export default function Sidebar() {
           {navItems.map(renderNavItem)}
         </nav>
 
-        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', paddingTop: '12px', borderTop: '1px solid rgba(212, 175, 55, 0.15)' }}>
+        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', paddingTop: '12px', borderTop: '1px solid rgba(255, 0, 127, 0.2)' }}>
           {bottomItems.map(renderNavItem)}
         </div>
       </aside>
@@ -147,9 +149,9 @@ export default function Sidebar() {
         left: 0,
         right: 0,
         height: '64px',
-        backgroundColor: 'rgba(8, 8, 12, 0.95)',
+        backgroundColor: 'rgba(12, 9, 24, 0.96)',
         backdropFilter: 'blur(40px)',
-        borderTop: '1px solid rgba(212, 175, 55, 0.2)',
+        borderTop: '1px solid rgba(255, 0, 127, 0.3)',
         zIndex: 50,
         display: 'flex',
         alignItems: 'center',
@@ -166,13 +168,13 @@ export default function Sidebar() {
               <Link href={item.href} key={item.href} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '64px', height: '100%', position: 'relative' }}>
                 <Icon 
                   size={18} 
-                  strokeWidth={1.5}
+                  strokeWidth={2}
                   style={{
                     marginBottom: '2px',
-                    color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
+                    color: isActive ? '#FF007F' : 'var(--text-secondary)',
                   }} 
                 />
-                <span style={{ fontSize: '0.55rem', fontFamily: 'var(--font-mono)', color: isActive ? 'var(--primary)' : 'var(--text-secondary)' }}>
+                <span style={{ fontSize: '0.58rem', fontFamily: 'var(--font-mono)', color: isActive ? '#FFD700' : 'var(--text-secondary)' }}>
                   {item.label}
                 </span>
               </Link>

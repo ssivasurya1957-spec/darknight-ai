@@ -1,38 +1,38 @@
-/* 1. IMPORTS & FONTS */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
+/* 1. VIBRANT COLORFUL FONTS & PALETTE */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=Fira+Code:wght@500;700&display=swap');
 
 @import "tailwindcss";
 
-/* 2. ULTIMATE 3D BATMAN PALETTE & DESIGN SYSTEM 🦇⚡️ */
+/* 2. COLORFUL NEON GOTHAM PALETTE & DESIGN SYSTEM 🎨🦇⚡️ */
 :root {
-  /* Obsidian Batcave Palette */
-  --bg: #030206;
-  --surface: #0b0a12;
-  --card: #14121e;
-  --card-top: #1b1828;
-  --card-bottom: #0f0d18;
+  /* Deep Dark Cosmic Canvas */
+  --bg: #070510;
+  --surface: #100b1e;
+  --card: #18122b;
   
-  /* 3D Metallic Cyber Gold & Gotham Accents */
-  --gold-primary: #FFD700;
-  --gold-metallic: #D4AF37;
-  --gold-dark: #8B7500;
-  --gold-glow: rgba(255, 215, 0, 0.4);
+  /* Vibrant Neon Palette */
+  --neon-gold: #FFD700;
+  --neon-pink: #FF007F;
+  --neon-cyan: #00F5FF;
+  --neon-purple: #9D4EDD;
+  --neon-emerald: #00F090;
+  --neon-orange: #FF6B00;
   
-  /* Batman Gotham Accents */
-  --bat-crimson: #FF2A5F;
-  --bat-violet: #9D4EDD;
-  --bat-cyan: #00F5FF;
-  --bat-emerald: #10B981;
+  /* Glowing Gradients */
+  --grad-pink-gold: linear-gradient(135deg, #FF007F 0%, #FFD700 100%);
+  --grad-cyan-purple: linear-gradient(135deg, #00F5FF 0%, #9D4EDD 100%);
+  --grad-gold-orange: linear-gradient(135deg, #FFD700 0%, #FF6B00 100%);
+  --grad-emerald-cyan: linear-gradient(135deg, #00F090 0%, #00F5FF 100%);
   
   /* Text */
-  --text-primary: #FFF8E7;
-  --text-secondary: #C8B9D6;
-  --text-muted: #7E6C8F;
+  --text-primary: #FFFFFF;
+  --text-secondary: #E0D5FA;
+  --text-muted: #9585B5;
   
   /* Typography */
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
-  --font-display: 'Cinzel', serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Outfit', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'Fira Code', monospace;
 }
 
 body {
@@ -42,134 +42,178 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
   background-image: 
-    radial-gradient(ellipse at 50% 0%, rgba(255, 215, 0, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 85% 90%, rgba(255, 42, 95, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 15% 70%, rgba(157, 78, 221, 0.06) 0%, transparent 50%);
+    radial-gradient(circle at 10% 20%, rgba(255, 0, 127, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(0, 245, 255, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.08) 0%, transparent 60%);
 }
 
-/* 3D Extruded Tactile Card */
-.bat-3d-card {
-  background: linear-gradient(145deg, #191626 0%, #0d0c15 100%);
-  border: 1px solid rgba(255, 215, 0, 0.28);
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+/* Vibrant Colorful Card */
+.vibrant-card {
+  background: linear-gradient(145deg, rgba(24, 18, 43, 0.95) 0%, rgba(14, 10, 26, 0.95) 100%);
+  border: 1px solid rgba(255, 0, 127, 0.3);
   border-radius: 20px;
   box-shadow: 
-    0 10px 0 #05040a,
-    0 15px 30px rgba(0, 0, 0, 0.9),
-    0 0 25px rgba(255, 215, 0, 0.12);
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
+    0 10px 30px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(255, 0, 127, 0.15);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(16px);
 }
 
-.bat-3d-card:hover {
+.vibrant-card:hover {
   transform: translateY(-6px) scale(1.015);
-  border-color: var(--gold-primary);
+  border-color: var(--neon-cyan);
   box-shadow: 
-    0 16px 0 #05040a,
-    0 25px 40px rgba(0, 0, 0, 0.95),
-    0 0 35px rgba(255, 215, 0, 0.35);
+    0 18px 40px rgba(0, 0, 0, 0.9),
+    0 0 35px rgba(0, 245, 255, 0.35);
 }
 
-/* 3D Tactile Gold Button */
-.bat-3d-button {
-  background: linear-gradient(180deg, #FFE45C 0%, #D4AF37 50%, #B8960C 100%);
+/* Colorful Gradient Buttons */
+.vibrant-btn-pink {
+  background: var(--grad-pink-gold);
   color: #000000;
-  font-family: var(--font-mono);
-  font-weight: 900;
-  border: none;
-  border-bottom: 4px solid #735D00;
-  border-radius: 14px;
-  box-shadow: 
-    0 6px 0 #3A2F00,
-    0 10px 20px rgba(255, 215, 0, 0.3);
-  transition: all 0.15s ease;
-  cursor: pointer;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
-}
-
-.bat-3d-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 0 #3A2F00,
-    0 14px 25px rgba(255, 215, 0, 0.5);
-  filter: brightness(1.08);
-}
-
-.bat-3d-button:active {
-  transform: translateY(4px);
-  border-bottom-width: 1px;
-  box-shadow: 
-    0 2px 0 #3A2F00,
-    0 4px 10px rgba(255, 215, 0, 0.2);
-}
-
-/* 3D Crimson Button */
-.bat-3d-crimson {
-  background: linear-gradient(180deg, #FF5983 0%, #FF2A5F 50%, #C4103B 100%);
-  color: #FFFFFF;
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-weight: 800;
   border: none;
-  border-bottom: 4px solid #7A001E;
   border-radius: 14px;
-  box-shadow: 
-    0 6px 0 #420010,
-    0 10px 20px rgba(255, 42, 95, 0.3);
-  transition: all 0.15s ease;
+  box-shadow: 0 6px 20px rgba(255, 0, 127, 0.4);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: pointer;
 }
 
-.bat-3d-crimson:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 0 #420010,
-    0 14px 25px rgba(255, 42, 95, 0.5);
+.vibrant-btn-pink:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(255, 0, 127, 0.6);
 }
 
-/* 3D Floating Pill Badge */
-.bat-3d-badge {
+.vibrant-btn-cyan {
+  background: var(--grad-cyan-purple);
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-weight: 800;
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 245, 255, 0.4);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.vibrant-btn-cyan:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(0, 245, 255, 0.6);
+}
+
+.vibrant-btn-gold {
+  background: var(--grad-gold-orange);
+  color: #000000;
+  font-family: var(--font-display);
+  font-weight: 800;
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.vibrant-btn-gold:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
+}
+
+/* Colorful Neon Badges */
+.vibrant-badge-pink {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
   border-radius: 30px;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 800;
   font-family: var(--font-mono);
-  background: linear-gradient(145deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05));
-  border: 1px solid rgba(255, 215, 0, 0.4);
-  border-bottom: 3px solid rgba(255, 215, 0, 0.5);
-  color: var(--gold-primary);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 15px rgba(255, 215, 0, 0.2);
+  background: rgba(255, 0, 127, 0.15);
+  border: 1px solid rgba(255, 0, 127, 0.4);
+  color: var(--neon-pink);
+  box-shadow: 0 0 15px rgba(255, 0, 127, 0.25);
 }
 
-/* 3D Metallic Gold Text Gradient */
-.bat-gold-text {
-  background: linear-gradient(135deg, #FFF0B3 0%, #FFD700 50%, #D4AF37 100%);
+.vibrant-badge-cyan {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  background: rgba(0, 245, 255, 0.15);
+  border: 1px solid rgba(0, 245, 255, 0.4);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 245, 255, 0.25);
+}
+
+.vibrant-badge-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  background: rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  color: var(--neon-gold);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.25);
+}
+
+.vibrant-badge-purple {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  background: rgba(157, 78, 221, 0.18);
+  border: 1px solid rgba(157, 78, 221, 0.4);
+  color: var(--neon-purple);
+  box-shadow: 0 0 15px rgba(157, 78, 221, 0.25);
+}
+
+/* Colorful Gradient Text */
+.vibrant-text-pink-gold {
+  background: var(--grad-pink-gold);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.3));
+  filter: drop-shadow(0 2px 10px rgba(255, 0, 127, 0.4));
 }
 
-/* 3D Floating Particle Animation */
-@keyframes bat-float-3d {
-  0%, 100% { transform: translateY(0px) rotate3d(1, 1, 0, 0deg); }
-  50% { transform: translateY(-8px) rotate3d(1, 1, 0, 4deg); }
+.vibrant-text-cyan-purple {
+  background: var(--grad-cyan-purple);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 10px rgba(0, 245, 255, 0.4));
 }
 
-.bat-3d-float {
-  animation: bat-float-3d 3.5s ease-in-out infinite;
+/* Colorful Particle Floating */
+@keyframes vibrant-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
 }
 
-/* Custom 3D Scrollbar */
+.vibrant-float {
+  animation: vibrant-float 3.5s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #030206;
+  background: #070510;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #FFD700, #8B7500);
+  background: linear-gradient(180deg, #FF007F, #00F5FF);
   border-radius: 10px;
-  border: 2px solid #030206;
+  border: 2px solid #070510;
 }
