@@ -1,4 +1,5 @@
 import './globals.css';
+import NextAuthProvider from '@/components/NextAuthProvider';
 
 export const metadata = {
   title: 'DarkKnight AI — by The DN Production',
@@ -17,7 +18,9 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body style={{ backgroundColor: '#050505', margin: 0, padding: 0 }}>
-        {children}
+        <NextAuthProvider>
+          {children}
+        </NextAuthProvider>
       </body>
     </html>
   );

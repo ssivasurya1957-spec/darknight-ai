@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, Search, Trophy, GraduationCap, 
-  Briefcase, BookOpen, MessageSquare, Bell, User, Settings 
+  Briefcase, BookOpen, MessageSquare, Bell, User, Settings, FileText
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -20,6 +20,7 @@ export default function Sidebar() {
     { icon: Briefcase, label: 'JOBS', href: '/dashboard/jobs' },
     { icon: BookOpen, label: 'RESEARCH', href: '/dashboard/research' },
     { icon: MessageSquare, label: 'AI CHAT', href: '/dashboard/chat' },
+    { icon: FileText, label: 'RESUME', href: '/dashboard/resume' },
     { icon: Bell, label: 'NOTIFICATIONS', href: '/dashboard/notifications' },
   ];
 
