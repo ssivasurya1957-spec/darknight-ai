@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Radio, RefreshCw, Cpu } from 'lucide-react';
+import { Sparkles, Heart, Radio, Cpu } from 'lucide-react';
 import { getAgentStatus } from '@/lib/agentState';
 
 export default function AgentConsole() {
@@ -23,39 +23,40 @@ export default function AgentConsole() {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       style={{
-        background: 'rgba(10,10,16,0.95)',
-        borderBottom: '1px solid rgba(212,175,55,0.2)',
+        background: 'rgba(10,8,16,0.95)',
+        borderBottom: '1px solid rgba(255,133,161,0.25)',
         padding: '8px 24px',
         display: 'flex',
         alignItems: 'center',
-        justify: 'space-between',
-        fontSize: '0.72rem',
+        justifyContent: 'space-between',
+        fontSize: '0.75rem',
         fontFamily: 'var(--font-mono)',
         zIndex: 40,
         position: 'relative',
+        backdropFilter: 'blur(10px)',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#22C55E' }}>
-          <Radio size={14} className="animate-pulse" />
-          <span style={{ fontWeight: 700 }}>{status.status}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+        <div className="cute-badge cute-badge-pink">
+          <span>🦇✨</span>
+          <span>Batty AI Guarding 24/7</span>
         </div>
         <span style={{ color: 'rgba(255,255,255,0.2)' }}>|</span>
         <span style={{ color: 'var(--text-secondary)' }}>
-          Active Loops: <strong style={{ color: '#D4AF37' }}>{status.activeAgents} Agents</strong>
+          Active Bat-Loops: <strong style={{ color: '#F4C430' }}>{status.activeAgents} Agents 💖</strong>
         </span>
         <span style={{ color: 'rgba(255,255,255,0.2)' }}>|</span>
         <span style={{ color: 'var(--text-secondary)' }}>
-          Postings Scanned: <strong style={{ color: '#fff' }}>{status.scannedCount}+</strong>
+          Dream Opportunities Scanned: <strong style={{ color: '#FF85A1' }}>{status.scannedCount}+ 🎀</strong>
         </span>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <span style={{ color: 'var(--text-muted)' }}>
-          Last Agent Sync: <strong style={{ color: '#22C55E' }}>{status.lastSync}</strong>
+        <span style={{ color: 'var(--text-muted)', fontSize: '0.7rem' }}>
+          Bat-Sync: <strong style={{ color: '#10B981' }}>{status.lastSync}</strong>
         </span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '2px 8px', borderRadius: '12px', background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.25)', color: '#D4AF37' }}>
-          <Cpu size={12} /> Gemini 1.5 Flash Active
+        <div className="cute-badge" style={{ padding: '3px 10px' }}>
+          <Sparkles size={12} /> Gemini 2.5 Active ✨
         </div>
       </div>
     </motion.div>

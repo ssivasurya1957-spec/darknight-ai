@@ -1,237 +1,158 @@
 /* 1. IMPORTS & FONTS */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
-@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @import "tailwindcss";
 
-/* 2. CSS CUSTOM PROPERTIES */
+/* 2. CSS CUSTOM PROPERTIES — CUTE MUSHY BATMAN THEME 🦇✨ */
 :root {
-  /* Colors - Gotham Batcave Gold & Dark Knight Palette */
-  --bg: #040406;
-  --surface: #0a0a0e;
-  --card: #111116;
-  --card-hover: #16161d;
+  /* Cute Dark Knight Batcave Palette */
+  --bg: #06050a;
+  --surface: #0e0c14;
+  --card: #15131f;
+  --card-hover: #1c1929;
   
-  /* Primary Metallic Gold */
-  --primary: #D4AF37;
-  --primary-hover: #C5A059;
-  --primary-glow: rgba(212, 175, 55, 0.25);
+  /* Primary Metallic Gold & Cute Rose Gold Accents */
+  --primary: #F4C430;
+  --primary-hover: #FFD700;
+  --primary-glow: rgba(244, 196, 48, 0.3);
   
-  /* Secondary Amber Accent */
-  --accent: #FFC107;
-  --accent-glow: rgba(255, 193, 7, 0.2);
+  /* Cute Mushy Pink/Purple/Golden Accents */
+  --accent-pink: #FF85A1;
+  --accent-purple: #B5179E;
+  --accent-gold: #FFD166;
+  --accent-glow: rgba(255, 133, 161, 0.25);
   
-  --success: #22C55E;
-  --danger: #E74C3C;
-  --warning: #F39C12;
+  --success: #10B981;
+  --danger: #FF4D6D;
+  --warning: #F59E0B;
   
-  --border: rgba(212, 175, 55, 0.18);
-  --border-glow: rgba(212, 175, 55, 0.35);
+  --border: rgba(244, 196, 48, 0.22);
+  --border-glow: rgba(255, 133, 161, 0.4);
   
-  --text-primary: #F5E6C8;
-  --text-secondary: #9E9178;
-  --text-muted: #5C5446;
+  --text-primary: #FFF0F5;
+  --text-secondary: #D4C3DA;
+  --text-muted: #8E7A99;
   
-  --glass: rgba(13, 13, 18, 0.85);
-  --glass-heavy: rgba(10, 10, 14, 0.95);
-  --glass-border: rgba(212, 175, 55, 0.2);
+  --glass: rgba(14, 12, 20, 0.88);
+  --glass-heavy: rgba(10, 8, 15, 0.96);
+  --glass-border: rgba(244, 196, 48, 0.25);
   
-  /* Borders & Shadows */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  /* Cute Soft Rounded Borders & Plush Shadows */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
   
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.8);
-  --shadow-glow: 0 0 25px rgba(212, 175, 55, 0.15);
-  
-  /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-base: 250ms ease;
-  --transition-slow: 400ms ease;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.85);
+  --shadow-glow: 0 0 30px rgba(244, 196, 48, 0.25);
+  --shadow-cute: 0 0 25px rgba(255, 133, 161, 0.2);
   
   /* Typography */
-  --font-sans: 'Satoshi', -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
   --font-display: 'Cinzel', serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-/* Batcomputer HUD Utilities */
-.bat-hud-tag {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--primary);
-  background: rgba(212, 175, 55, 0.08);
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  padding: 3px 10px;
-  border-radius: 4px;
-}
-
-.bat-border-glow {
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
-}
-
-.text-gold-gradient {
-  background: linear-gradient(135deg, #FFF0CA 0%, #D4AF37 50%, #AA820A 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* 3. CSS RESET & BASE STYLES */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-html, body {
+body {
   background-color: var(--bg);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.5;
-  margin: 0;
-  padding: 0;
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(244, 196, 48, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(255, 133, 161, 0.04) 0%, transparent 40%);
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(212, 175, 55, 0.3);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
+/* Cute Floating Animations */
+@keyframes float-cute {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
 }
 
-/* Glass Card */
-.glass-card {
-  background: var(--glass);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 1px solid var(--glass-border);
+@keyframes pulse-cute {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
+}
+
+@keyframes bat-wings {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.1); }
+}
+
+.cute-float {
+  animation: float-cute 4s ease-in-out infinite;
+}
+
+.cute-pulse {
+  animation: pulse-cute 2.5s ease-in-out infinite;
+}
+
+.cute-card {
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  transition: all var(--transition-base);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: var(--shadow-sm);
 }
 
-.glass-card:hover {
-  border-color: rgba(212, 175, 55, 0.45);
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+.cute-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-glow), var(--shadow-cute);
 }
 
-/* Buttons */
-.btn {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 10px 20px;
-  border-radius: var(--radius-md);
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all var(--transition-fast);
+.cute-badge {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #D4AF37, #AA820A);
-  color: #000000;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.75rem;
   font-weight: 700;
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, #FFF0CA, #D4AF37);
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
-  transform: translateY(-1px);
-}
-
-.btn-outline {
-  background: transparent;
-  border-color: rgba(212, 175, 55, 0.3);
+  font-family: var(--font-mono);
+  background: rgba(244, 196, 48, 0.12);
+  border: 1px solid rgba(244, 196, 48, 0.3);
   color: var(--primary);
 }
 
-.btn-outline:hover {
-  border-color: var(--primary);
-  background: rgba(212, 175, 55, 0.1);
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+.cute-badge-pink {
+  background: rgba(255, 133, 161, 0.15);
+  border: 1px solid rgba(255, 133, 161, 0.4);
+  color: var(--accent-pink);
 }
 
-/* Inputs */
-.input {
-  background: #0a0a0f;
-  border: 1px solid rgba(212, 175, 55, 0.25);
+.cute-button-gold {
+  background: linear-gradient(135deg, #F4C430 0%, #FFD700 100%);
+  color: #000000;
+  font-weight: 800;
   border-radius: var(--radius-md);
-  color: #ffffff;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  padding: 12px 16px;
-  width: 100%;
-  outline: none;
-  transition: all var(--transition-fast);
+  box-shadow: 0 0 20px rgba(244, 196, 48, 0.35);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
+.cute-button-gold:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 30px rgba(244, 196, 48, 0.5);
 }
 
-/* Badges */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  padding: 3px 10px;
-  border-radius: 6px;
-  border: 1px solid;
-  text-transform: uppercase;
+/* Custom Cute Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.badge-blue {
-  background: rgba(212, 175, 55, 0.1);
-  color: #D4AF37;
-  border-color: rgba(212, 175, 55, 0.3);
+::-webkit-scrollbar-track {
+  background: #06050a;
 }
 
-.badge-cyan {
-  background: rgba(0, 217, 255, 0.1);
-  color: #00D9FF;
-  border-color: rgba(0, 217, 255, 0.3);
+::-webkit-scrollbar-thumb {
+  background: rgba(244, 196, 48, 0.25);
+  border-radius: 10px;
 }
 
-.badge-green {
-  background: rgba(34, 197, 94, 0.1);
-  color: #22C55E;
-  border-color: rgba(34, 197, 94, 0.3);
-}
-
-.badge-amber {
-  background: rgba(243, 156, 18, 0.1);
-  color: #F39C12;
-  border-color: rgba(243, 156, 18, 0.3);
-}
-
-.badge-red {
-  background: rgba(231, 76, 60, 0.1);
-  color: #E74C3C;
-  border-color: rgba(231, 76, 60, 0.3);
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 133, 161, 0.5);
 }

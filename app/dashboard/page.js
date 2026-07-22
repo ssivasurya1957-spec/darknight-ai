@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, TrendingUp, Clock, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, TrendingUp, Clock, Sparkles, ArrowRight, Heart, Star } from 'lucide-react';
 import GlassCard from '@/components/GlassCard';
 import OpportunityCard from '@/components/OpportunityCard';
 import { opportunities as mockOpportunities } from '@/lib/mockData';
@@ -11,7 +11,7 @@ import Link from 'next/link';
 
 export default function DashboardPage() {
   const { data: session } = useSession();
-  const [userName, setUserName] = useState('USER');
+  const [userName, setUserName] = useState('BAT-AGENT');
 
   useEffect(() => {
     try {
@@ -33,9 +33,7 @@ export default function DashboardPage() {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.08
-      }
+      transition: { staggerChildren: 0.08 }
     }
   };
 
@@ -46,9 +44,9 @@ export default function DashboardPage() {
 
   const getTimeGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'GOOD MORNING';
-    if (hour < 18) return 'GOOD AFTERNOON';
-    return 'GOOD EVENING';
+    if (hour < 12) return 'GOOD MORNING, CUTIE';
+    if (hour < 18) return 'GOOD AFTERNOON, CUTIE';
+    return 'GOOD EVENING, CUTIE';
   };
 
   // Calculate real live stats dynamically
@@ -58,161 +56,101 @@ export default function DashboardPage() {
     const days = Math.ceil((new Date(o.deadline) - new Date()) / (1000 * 60 * 60 * 24));
     return days > 0 && days <= 25;
   }).length;
-  const avgMatch = Math.round(mockOpportunities.reduce((acc, o) => acc + o.matchScore, 0) / (totalOps || 1));
-
-  const topOpportunities = mockOpportunities.slice(0, 6);
+  const avgMatch = Math.round(mockOpportunities.reduce((acc, curr) => acc + curr.matchScore, 0) / (totalOps || 1));
 
   return (
     <motion.div 
+      className="space-y-8 max-w-7xl mx-auto px-4 py-6"
       variants={containerVariants}
       initial="hidden"
       animate="show"
-      style={{
-        padding: '24px 32px 64px',
-        maxWidth: '1360px',
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '36px',
-      }}
     >
-      {/* 1. Header Section */}
-      <motion.div variants={itemVariants} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-        <div>
-          <h1 style={{
-            fontFamily: 'var(--font-display)',
-            fontWeight: 800,
-            fontSize: '2.5rem',
-            color: '#F5E6C8',
-            textTransform: 'uppercase',
-            letterSpacing: '0.06em',
-            margin: 0,
-            textShadow: '0 0 20px rgba(212, 175, 55, 0.2)',
-          }}>
-            {getTimeGreeting()}, {userName}
-          </h1>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px' }}>
-            <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--primary)', letterSpacing: '0.1em' }}>
-              🦇 SYSTEM TIME: {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()}
-            </span>
+      {/* Cute Mushy Batcave Welcome Hero Header */}
+      <motion.div variants={itemVariants} className="cute-card p-6 md:p-8 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(255,133,161,0.06) 100%)' }}>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+          <div>
+            <div className="cute-badge cute-badge-pink mb-3">
+              <Sparkles size={14} /> {getTimeGreeting()} 🦇💖
+            </div>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '2rem', fontWeight: 800, color: '#F5E6C8', margin: '0 0 6px' }}>
+              WELCOME TO THE BATCAVE, {userName}! 🦇✨
+            </h1>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', fontFamily: 'var(--font-sans)', margin: 0 }}>
+              Your cute Batty AI Agent is scanning Google, Microsoft, Upstox & Fiverr 24/7 with love 💖
+            </p>
           </div>
-        </div>
 
-        <div style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.75rem',
-          color: 'var(--primary)',
-          backgroundColor: 'rgba(212, 175, 55, 0.08)',
-          border: '1px solid rgba(212, 175, 55, 0.25)',
-          padding: '8px 16px',
-          borderRadius: '10px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-        }}>
-          <ShieldCheck size={16} />
-          <span>WAYNE TECH CLEARANCE // LEVEL 4</span>
+          <div className="flex items-center gap-3">
+            <Link href="/dashboard/search" className="cute-button-gold px-5 py-3 flex items-center gap-2 text-sm font-bold no-underline">
+              <Sparkles size={16} /> Explore Opportunities 💖
+            </Link>
+          </div>
         </div>
       </motion.div>
 
-      {/* 2. Dynamic Real Stats Grid */}
-      <motion.div variants={itemVariants} style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-        gap: '20px',
-      }}>
-        <GlassCard style={{ padding: '20px 24px', border: '1px solid rgba(212, 175, 55, 0.25)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>[ ACTIVE INDEX ]</span>
-            <LayoutDashboard size={18} style={{ color: 'var(--primary)' }} />
-          </div>
-          <div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 800, color: '#ffffff', lineHeight: 1 }}>
-              {totalOps}
+      {/* Cute Stats Grid */}
+      <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <GlassCard className="cute-card p-5">
+          <div className="flex items-center justify-between">
+            <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Live Opportunities</span>
+            <div style={{ padding: '8px', borderRadius: '12px', background: 'rgba(244,196,48,0.12)', color: '#F4C430' }}>
+              <LayoutDashboard size={20} />
             </div>
-            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--success)', marginTop: '6px' }}>● Verified live listings</div>
           </div>
+          <div style={{ fontSize: '2rem', fontWeight: 800, color: '#F5E6C8', margin: '12px 0 2px' }}>{totalOps}</div>
+          <div style={{ fontSize: '0.75rem', color: '#10B981', fontFamily: 'var(--font-mono)' }}>⚡ 24/7 Agentic Scan Active</div>
         </GlassCard>
 
-        <GlassCard style={{ padding: '20px 24px', border: '1px solid rgba(212, 175, 55, 0.25)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>[ HIGH MATCH ]</span>
-            <TrendingUp size={18} style={{ color: 'var(--success)' }} />
-          </div>
-          <div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 800, color: '#ffffff', lineHeight: 1 }}>
-              {highMatchCount}
+        <GlassCard className="cute-card p-5">
+          <div className="flex items-center justify-between">
+            <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', textTransform: 'uppercase' }}>High Dream Matches</span>
+            <div style={{ padding: '8px', borderRadius: '12px', background: 'rgba(255,133,161,0.15)', color: '#FF85A1' }}>
+              <Heart size={20} />
             </div>
-            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--success)', marginTop: '6px' }}>▲ 90%+ compatibility</div>
           </div>
+          <div style={{ fontSize: '2rem', fontWeight: 800, color: '#F5E6C8', margin: '12px 0 2px' }}>{highMatchCount}</div>
+          <div style={{ fontSize: '0.75rem', color: '#FF85A1', fontFamily: 'var(--font-mono)' }}>💖 90%+ Match Score</div>
         </GlassCard>
 
-        <GlassCard style={{ padding: '20px 24px', border: '1px solid rgba(212, 175, 55, 0.25)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>[ EXPIRING SOON ]</span>
-            <Clock size={18} style={{ color: 'var(--danger)' }} />
-          </div>
-          <div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 800, color: '#ffffff', lineHeight: 1 }}>
-              {expiringSoonCount}
+        <GlassCard className="cute-card p-5">
+          <div className="flex items-center justify-between">
+            <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Expiring Soon</span>
+            <div style={{ padding: '8px', borderRadius: '12px', background: 'rgba(245,158,11,0.12)', color: '#F59E0B' }}>
+              <Clock size={20} />
             </div>
-            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--danger)', marginTop: '6px' }}>⚡ Urgent action required</div>
           </div>
+          <div style={{ fontSize: '2rem', fontWeight: 800, color: '#F5E6C8', margin: '12px 0 2px' }}>{expiringSoonCount}</div>
+          <div style={{ fontSize: '0.75rem', color: '#F59E0B', fontFamily: 'var(--font-mono)' }}>⏳ Apply This Week</div>
         </GlassCard>
 
-        <GlassCard style={{ padding: '20px 24px', border: '1px solid rgba(212, 175, 55, 0.25)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>[ AI COMPATIBILITY ]</span>
-            <Sparkles size={18} style={{ color: 'var(--primary)' }} />
-          </div>
-          <div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 800, color: 'var(--primary)', lineHeight: 1 }}>
-              {avgMatch}%
+        <GlassCard className="cute-card p-5">
+          <div className="flex items-center justify-between">
+            <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Avg Compatibility</span>
+            <div style={{ padding: '8px', borderRadius: '12px', background: 'rgba(16,185,129,0.12)', color: '#10B981' }}>
+              <TrendingUp size={20} />
             </div>
-            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', marginTop: '6px' }}>Optimized profile match</div>
           </div>
+          <div style={{ fontSize: '2rem', fontWeight: 800, color: '#F5E6C8', margin: '12px 0 2px' }}>{avgMatch}%</div>
+          <div style={{ fontSize: '0.75rem', color: '#10B981', fontFamily: 'var(--font-mono)' }}>✨ Powered by Gemini AI</div>
         </GlassCard>
       </motion.div>
 
-      {/* 3. Opportunities Feed */}
-      <motion.div variants={itemVariants}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '1.2rem' }}>🦇</span>
-            <h2 style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 800,
-              fontSize: '1.3rem',
-              color: '#F5E6C8',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              margin: 0,
-            }}>
-              Building Opportunities
-            </h2>
-          </div>
-          <Link href="/dashboard/search" style={{ textDecoration: 'none' }}>
-            <div style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.75rem',
-              color: 'var(--primary)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              cursor: 'pointer',
-            }}>
-              VIEW ALL <ArrowRight size={14} />
+      {/* Featured Dream Opportunities */}
+      <motion.div variants={itemVariants} className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="cute-badge cute-badge-pink">
+              <Star size={14} /> Top Picked For You 🦇💖
             </div>
+          </div>
+          <Link href="/dashboard/search" className="text-xs font-mono text-amber-400 hover:underline flex items-center gap-1 no-underline">
+            View All ({totalOps}) <ArrowRight size={14} />
           </Link>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-          gap: '20px',
-        }}>
-          {topOpportunities.map((opportunity, index) => (
-            <OpportunityCard key={opportunity.id} opportunity={opportunity} index={index} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {mockOpportunities.slice(0, 6).map((op) => (
+            <OpportunityCard key={op.id} opportunity={op} />
           ))}
         </div>
       </motion.div>

@@ -72,53 +72,53 @@ Provide a winning hackathon strategy covering:
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 800, color: '#F5E6C8', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>
-              🎓 Student Hub: Hackathons & Research
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 800, color: '#F5E6C8', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>
+              🏆 Student Hub & Interactive Map 🦇💖📍
             </h1>
-            <span style={{ fontSize: '0.68rem', fontFamily: 'var(--font-mono)', padding: '3px 10px', borderRadius: '20px', background: 'rgba(212,175,55,0.1)', color: '#D4AF37', border: '1px solid rgba(212,175,55,0.3)' }}>
-              LIVE EVENTS
+            <span className="cute-badge cute-badge-pink">
+              LIVE EVENTS ✨
             </span>
           </div>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            Location set to <strong style={{ color: '#22C55E' }}>{userLocation}</strong> · Interactive Leaflet.js venue map & research grants
+            Location set to <strong style={{ color: '#10B981' }}>📍 {userLocation}</strong> · Interactive Leaflet.js venue map & research grants 💖
           </p>
         </div>
 
         {/* Tab Toggle */}
-        <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.5)', padding: '4px', borderRadius: '14px', border: '1px solid rgba(212,175,55,0.15)' }}>
+        <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.5)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,133,161,0.3)' }}>
           <button
             onClick={() => setActiveTab('browse')}
             style={{
-              padding: '8px 14px', borderRadius: '10px', border: 'none',
-              background: activeTab === 'browse' ? 'rgba(212,175,55,0.15)' : 'transparent',
-              color: activeTab === 'browse' ? '#D4AF37' : 'var(--text-secondary)',
-              fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer'
+              padding: '8px 16px', borderRadius: '12px', border: 'none',
+              background: activeTab === 'browse' ? 'linear-gradient(135deg, rgba(244,196,48,0.25), rgba(255,133,161,0.2))' : 'transparent',
+              color: activeTab === 'browse' ? '#F4C430' : 'var(--text-secondary)',
+              fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 800, cursor: 'pointer'
             }}
           >
-            Browse Hackathons
+            ✨ Browse Hackathons 💖
           </button>
           <button
             onClick={() => setActiveTab('map')}
             style={{
-              display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '10px', border: 'none',
-              background: activeTab === 'map' ? 'rgba(34,197,94,0.15)' : 'transparent',
-              color: activeTab === 'map' ? '#22C55E' : 'var(--text-secondary)',
-              fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer'
+              display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '12px', border: 'none',
+              background: activeTab === 'map' ? 'rgba(16,185,129,0.2)' : 'transparent',
+              color: activeTab === 'map' ? '#10B981' : 'var(--text-secondary)',
+              fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 800, cursor: 'pointer'
             }}
           >
-            <MapPin size={14} /> Interactive Map
+            <MapPin size={14} /> Interactive Map 📍
           </button>
           <button
             onClick={() => setActiveTab('research')}
             style={{
-              display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '10px', border: 'none',
-              background: activeTab === 'research' ? 'rgba(245,158,11,0.15)' : 'transparent',
+              display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '12px', border: 'none',
+              background: activeTab === 'research' ? 'rgba(245,158,11,0.2)' : 'transparent',
               color: activeTab === 'research' ? '#F59E0B' : 'var(--text-secondary)',
-              fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer'
+              fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 800, cursor: 'pointer'
             }}
           >
-            <FlaskConical size={14} /> Research Funding
+            <FlaskConical size={14} /> Grants 🧪
           </button>
           <button
             onClick={() => setActiveTab('toolkit')}

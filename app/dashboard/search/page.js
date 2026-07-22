@@ -239,37 +239,38 @@ export default function SearchPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
           <div>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 800, color: '#F5E6C8', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>
-              🔍 24/7 Agentic Opportunity Scanner
+              🔍 24/7 Batty AI Scanner 🦇💖✨
             </h1>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-secondary)', margin: '4px 0 0' }}>
-              Real-time API & Gemini Agent Aggregator · Scans Google, Microsoft, Amazon, Upstox, Fiverr
+              Real-time Gemini AI & API Aggregator · Live vacancies at Google, Microsoft, Upstox, Fiverr & Amazon 💖
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '6px' }}>
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
             {TARGET_COMPANIES.map(c => (
               <button
                 key={c}
                 onClick={() => { setQuery(c); runSearch(c, activeFilter); }}
-                style={{ padding: '4px 10px', borderRadius: '16px', border: '1px solid rgba(212,175,55,0.2)', background: 'rgba(212,175,55,0.06)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', cursor: 'pointer' }}
+                className="cute-badge cute-badge-pink cursor-pointer"
+                style={{ fontSize: '0.7rem' }}
               >
-                + {c} Watchlist
+                🔔 {c} Watchlist
               </button>
             ))}
           </div>
         </div>
 
         {/* Search Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(10,10,16,0.95)', border: '1px solid rgba(212,175,55,0.25)', borderRadius: '14px', padding: '14px 20px', marginBottom: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(10,8,16,0.95)', border: '1px solid rgba(255,133,161,0.3)', borderRadius: '16px', padding: '14px 20px', marginBottom: '16px', boxShadow: '0 0 25px rgba(255,133,161,0.1)' }}>
           {isSearching
-            ? <RefreshCw size={20} style={{ color: '#D4AF37', animation: 'spin 1s linear infinite', flexShrink: 0 }} />
-            : <Search size={20} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+            ? <RefreshCw size={20} style={{ color: '#F4C430', animation: 'spin 1s linear infinite', flexShrink: 0 }} />
+            : <Search size={20} style={{ color: '#FF85A1', flexShrink: 0 }} />
           }
           <input
             type="text"
             value={query}
             onChange={handleInputChange}
-            placeholder="Type role, skill, or target company (e.g. Amazon Data Scientist, Google, Upstox, Fiverr)..."
+            placeholder="Search dream roles, skills, or companies (e.g. Google AI, Upstox Backend, Fiverr Remote)..."
             style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#e8e8e8', fontSize: '1rem', fontFamily: 'inherit' }}
             autoFocus
           />
@@ -277,28 +278,28 @@ export default function SearchPage() {
 
         {/* Tabs: Preferred vs Explore All */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-          <div style={{ display: 'flex', gap: '6px', background: 'rgba(0,0,0,0.5)', padding: '4px', borderRadius: '12px', border: '1px solid rgba(212,175,55,0.15)' }}>
+          <div style={{ display: 'flex', gap: '6px', background: 'rgba(0,0,0,0.5)', padding: '4px', borderRadius: '14px', border: '1px solid rgba(244,196,48,0.25)' }}>
             <button
               onClick={() => setActiveTab('preferred')}
               style={{
-                padding: '6px 14px', borderRadius: '8px', border: 'none',
-                background: activeTab === 'preferred' ? 'rgba(212,175,55,0.15)' : 'transparent',
-                color: activeTab === 'preferred' ? '#D4AF37' : 'var(--text-secondary)',
-                fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer'
+                padding: '8px 16px', borderRadius: '10px', border: 'none',
+                background: activeTab === 'preferred' ? 'linear-gradient(135deg, rgba(244,196,48,0.25), rgba(255,133,161,0.2))' : 'transparent',
+                color: activeTab === 'preferred' ? '#F4C430' : 'var(--text-secondary)',
+                fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 800, cursor: 'pointer'
               }}
             >
-              High Match / Preferred
+              ✨ Dream High Matches 💖
             </button>
             <button
               onClick={() => setActiveTab('explore')}
               style={{
-                padding: '6px 14px', borderRadius: '8px', border: 'none',
-                background: activeTab === 'explore' ? 'rgba(59,130,246,0.15)' : 'transparent',
-                color: activeTab === 'explore' ? '#3B82F6' : 'var(--text-secondary)',
-                fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer'
+                padding: '8px 16px', borderRadius: '10px', border: 'none',
+                background: activeTab === 'explore' ? 'rgba(255,133,161,0.2)' : 'transparent',
+                color: activeTab === 'explore' ? '#FF85A1' : 'var(--text-secondary)',
+                fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 800, cursor: 'pointer'
               }}
             >
-              Explore All / Low Preference Field Bucket
+              🌸 Explore Low Preference Field 🎀
             </button>
           </div>
 

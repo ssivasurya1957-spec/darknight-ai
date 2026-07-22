@@ -5,12 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp, Bot, Trash2, Sparkles, RefreshCw, User, Briefcase, Code, Trophy, FlaskConical } from 'lucide-react';
 
 const QUICK_PROMPTS = [
-  { label: '💼 Jobs for me', prompt: 'What are the best job opportunities matching my skills right now?' },
-  { label: '🏆 Hackathons', prompt: 'Show me upcoming hackathons I can participate in this month.' },
-  { label: '🎓 Internships', prompt: 'Find remote internships in AI/ML with good stipends.' },
-  { label: '🔬 Research', prompt: 'Are there any research funding opportunities or PhD positions?' },
-  { label: '💰 Salary guide', prompt: 'What is the average salary for a software engineer in India right now?' },
-  { label: '📄 Resume tips', prompt: 'Help me improve my resume for a product manager role.' },
+  { label: '💼 Dream Jobs 💖', prompt: 'What are the best job opportunities matching my skills right now?' },
+  { label: '🏆 Cute Hackathons 🌸', prompt: 'Show me upcoming hackathons I can participate in this month.' },
+  { label: '🎓 Mushy Internships 🎀', prompt: 'Find remote internships in AI/ML with good stipends.' },
+  { label: '🔬 Research Grants 🧪', prompt: 'Are there any research funding opportunities or PhD positions?' },
+  { label: '💰 Salary Benchmarks ✨', prompt: 'What is the average salary for a software engineer in India right now?' },
+  { label: '📄 Resume Magic 🦇', prompt: 'Help me improve my resume for a product manager role.' },
 ];
 
 function MarkdownText({ text }) {
@@ -61,7 +61,7 @@ export default function ChatPage() {
         setMessages([{
           id: 'welcome',
           role: 'ai',
-          content: `Welcome, ${JSON.parse(localStorage.getItem('darknight_user') || '{}')?.name || 'Agent'}! I'm your personal DarkKnight AI career assistant.\n\nI remember our past conversations and know your interests. Ask me anything — job openings, salary benchmarks, hackathon strategies, or resume tailoring.\n\n*What goal can I help you achieve today?*`,
+          content: `Welcome to the Batcave, ${JSON.parse(localStorage.getItem('darknight_user') || '{}')?.name || 'Cutie Agent'}! 🦇💖✨ I'm your Batty AI career copilot.\n\nI remember our past chats and know your dream interests. Ask me anything — live job vacancies, salary benchmarks, cute hackathons, or ATS resume tailoring!\n\n*What dream goal can I help you achieve today, cutie? 💖*`,
           timestamp: new Date().toISOString(),
         }]);
       }

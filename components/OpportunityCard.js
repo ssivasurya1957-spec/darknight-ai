@@ -105,16 +105,15 @@ export default function OpportunityCard({ opportunity, index = 0 }) {
               | {domain.toUpperCase()}
             </span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: 'rgba(212, 175, 55, 0.08)', padding: '2px 7px', borderRadius: '6px', border: '1px solid rgba(212, 175, 55, 0.25)' }}>
-            <span style={{ fontSize: '0.62rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>MATCH</span>
-            <span style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--primary)' }}>{matchScore}%</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: 'rgba(255, 133, 161, 0.12)', padding: '3px 9px', borderRadius: '14px', border: '1px solid rgba(255, 133, 161, 0.35)' }}>
+            <span style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', fontWeight: 800, color: '#FF85A1' }}>💖 {matchScore}%</span>
           </div>
         </div>
         
         {/* Title */}
         <h3 style={{
           fontFamily: 'var(--font-sans)',
-          fontWeight: 700,
+          fontWeight: 800,
           fontSize: '1.05rem',
           color: '#ffffff',
           marginBottom: '4px',
@@ -126,40 +125,40 @@ export default function OpportunityCard({ opportunity, index = 0 }) {
 
         {/* Organization & Location */}
         <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', margin: 0, marginBottom: '12px' }}>
-          {organization} &nbsp;•&nbsp; <span style={{ textTransform: 'uppercase', color: 'var(--text-muted)' }}>{location}</span>
+          {organization} &nbsp;•&nbsp; <span style={{ textTransform: 'uppercase', color: 'var(--text-muted)' }}>📍 {location}</span>
         </p>
 
         {/* Stipend / Salary */}
         {stipend && (
-          <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-mono)', color: '#22C55E', marginBottom: '16px', fontWeight: 600 }}>
-            {stipend}
+          <div style={{ fontSize: '0.78rem', fontFamily: 'var(--font-mono)', color: '#10B981', marginBottom: '16px', fontWeight: 700 }}>
+            💰 {stipend}
           </div>
         )}
         
         {/* Action Row */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', paddingTop: '12px', borderTop: '1px solid rgba(212, 175, 55, 0.1)', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', paddingTop: '12px', borderTop: '1px solid rgba(244, 196, 48, 0.15)', gap: '8px' }}>
           <button
             type="button"
             onClick={handleAskAI}
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '5px 10px', borderRadius: '8px',
-              border: '1px solid rgba(212, 175, 55, 0.3)', background: 'rgba(212, 175, 55, 0.1)',
-              color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 600, cursor: 'pointer'
+              display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '12px',
+              border: '1px solid rgba(255, 133, 161, 0.4)', background: 'rgba(255, 133, 161, 0.12)',
+              color: '#FF85A1', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer'
             }}
           >
-            <Sparkles size={12} /> Ask AI
+            <Sparkles size={12} /> 🦇✨ Ask Batty
           </button>
 
           <button
             type="button"
             onClick={handleApplyClick}
+            className="cute-button-gold"
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 14px', borderRadius: '8px',
-              border: 'none', background: 'linear-gradient(135deg, #D4AF37, #F5D767)', color: '#000',
-              fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer'
+              display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 14px', borderRadius: '12px',
+              border: 'none', fontSize: '0.72rem', fontWeight: 800, cursor: 'pointer'
             }}
           >
-            Apply Directly <ExternalLink size={11} />
+            Apply Directly 💖 <ExternalLink size={11} />
           </button>
         </div>
       </GlassCard>
