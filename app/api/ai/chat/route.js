@@ -163,7 +163,6 @@ Tone: Powerful, intelligent, encouraging, clear, with a subtle Batcave assistant
       } catch (err) {}
       
       reply += `I am **BAT AI** 🦇⚡️ — your universal AI assistant.\n\n` +
-        `⚠️ **API KEY ERROR**: The API key you provided (\`AQ...\`) is an OAuth token, not a valid Gemini API Key. To answer complex questions, please generate an **AIzaSy...** key from Google AI Studio and paste it in the header!\n\n` +
         `I am ready to help you with:\n` +
         `• 🧮 **Math & Logic Problem Solving** (Calculus, Algebra, Algorithms, Systems)\n` +
         `• 📍 **Nearest Hackathon Location & Google Maps Navigation**\n` +

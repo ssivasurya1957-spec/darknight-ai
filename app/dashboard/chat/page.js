@@ -33,9 +33,6 @@ export default function ChatPage() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
-  const [showKeyModal, setShowKeyModal] = useState(false);
-  const [customKey, setCustomKey] = useState('');
-  const [keySaved, setKeySaved] = useState(false);
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -46,9 +43,6 @@ export default function ChatPage() {
     try {
       const stored = localStorage.getItem('darknight_user');
       if (stored) setUserProfile(JSON.parse(stored));
-
-      const existingKey = localStorage.getItem('gemini_api_key') || '';
-      setCustomKey(existingKey);
 
       const savedMsgs = localStorage.getItem(CHAT_STORAGE_KEY);
       if (savedMsgs) {
@@ -80,17 +74,6 @@ export default function ChatPage() {
     }
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-
-  const saveApiKey = () => {
-    if (customKey.trim()) {
-      localStorage.setItem('gemini_api_key', customKey.trim());
-      setKeySaved(true);
-      setTimeout(() => { setKeySaved(false); setShowKeyModal(false); }, 1200);
-    } else {
-      localStorage.removeItem('gemini_api_key');
-      setShowKeyModal(false);
-    }
-  };
 
   const sendMessage = useCallback(async (text) => {
     if (!text.trim() || isTyping) return;
@@ -174,51 +157,11 @@ export default function ChatPage() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <button
-            onClick={() => setShowKeyModal(true)}
-            className="vibrant-badge-gold cursor-pointer"
-            style={{ fontSize: '0.72rem', padding: '6px 12px' }}
-          >
-            <Key size={13} /> {customKey ? 'Key Active ✓' : 'Add Custom API Key'}
-          </button>
-
           <button onClick={clearChat} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '10px', border: '1px solid rgba(255,0,127,0.3)', background: 'rgba(255,0,127,0.1)', color: '#FF007F', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', cursor: 'pointer', fontWeight: 700 }}>
             <Trash2 size={13} /> Clear Chat
           </button>
         </div>
       </div>
-
-      {/* API Key Modal */}
-      <AnimatePresence>
-        {showKeyModal && (
-          <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} style={{ background: '#120c23', border: '2px solid rgba(255,0,127,0.4)', borderRadius: '20px', padding: '24px', maxWidth: '440px', width: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.9)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#FFF', fontFamily: 'var(--font-display)' }}>
-                  🔑 Custom Google Gemini API Key
-                </h3>
-                <button onClick={() => setShowKeyModal(false)} style={{ background: 'transparent', border: 'none', color: '#FF007F', cursor: 'pointer' }}><X size={18} /></button>
-              </div>
-
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', marginBottom: '14px' }}>
-                BAT AI works out-of-the-box! But if you have your own API Key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" style={{ color: '#FFD700' }}>Google AI Studio</a> (<code style={{ color: '#00F5FF' }}>AIzaSy...</code>), paste it below:
-              </p>
-
-              <input
-                type="password"
-                value={customKey}
-                onChange={e => setCustomKey(e.target.value)}
-                placeholder="AIzaSy..."
-                style={{ width: '100%', padding: '12px', borderRadius: '12px', border: '1px solid rgba(255,0,127,0.3)', background: 'rgba(255,255,255,0.04)', color: '#fff', fontSize: '0.88rem', outline: 'none', fontFamily: 'var(--font-mono)', marginBottom: '16px' }}
-              />
-
-              <button onClick={saveApiKey} className="vibrant-btn-pink" style={{ width: '100%', padding: '12px', borderRadius: '12px', fontSize: '0.88rem' }}>
-                {keySaved ? '✓ Saved Successfully!' : 'Save Key'}
-              </button>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
       {/* Conversation Thread */}
       <div style={{ flex: 1, overflowY: 'auto', paddingRight: '8px', display: 'flex', flexDirection: 'column', gap: '16px', paddingBottom: '140px' }}>
