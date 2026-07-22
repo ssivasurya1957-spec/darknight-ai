@@ -51,22 +51,26 @@ export default function ChatPage() {
       const savedInterests = localStorage.getItem(INTEREST_KEY);
       if (savedInterests) {
         setInterests(JSON.parse(savedInterests));
-      } else {
-        setShowInterestSetup(true);
       }
 
       const savedMsgs = localStorage.getItem(CHAT_STORAGE_KEY);
       if (savedMsgs) {
         const parsed = JSON.parse(savedMsgs);
-        setMessages(parsed.slice(-80)); // Keep last 80 messages for memory
+        setMessages(parsed.slice(-80));
       } else {
-        // Welcome message
         setMessages([{
           id: 'welcome',
           role: 'ai',
-          content: `Welcome, ${JSON.parse(localStorage.getItem('darknight_user') || '{}')?.name || 'Agent'}! I'm your personal DarkKnight AI career assistant.\n\nI remember our past conversations and know your interests. Ask me anything — jobs, salaries, hackathons, resume advice, or career strategy.\n\n*What are you working towards today?*`,
+          content: `Welcome, ${JSON.parse(localStorage.getItem('darknight_user') || '{}')?.name || 'Agent'}! I'm your personal DarkKnight AI career assistant.\n\nI remember our past conversations and know your interests. Ask me anything — job openings, salary benchmarks, hackathon strategies, or resume tailoring.\n\n*What goal can I help you achieve today?*`,
           timestamp: new Date().toISOString(),
         }]);
+      }
+
+      // Check if URL has ?prompt=
+      const urlParams = new URLSearchParams(window.location.search);
+      const promptParam = urlParams.get('prompt');
+      if (promptParam) {
+        setTimeout(() => sendMessage(promptParam), 500);
       }
     } catch (e) {
       console.error(e);

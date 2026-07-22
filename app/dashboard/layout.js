@@ -1,16 +1,29 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '@/components/Sidebar';
 import ParticleBackground from '@/components/ParticleBackground';
 import FloatingChatbot from '@/components/FloatingChatbot';
+import OnboardingModal from '@/components/OnboardingModal';
 
 export default function DashboardLayout({ children }) {
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    try {
+      const prefs = localStorage.getItem('darknight_user_preferences');
+      if (!prefs) {
+        setShowOnboarding(true);
+      }
+    } catch (e) {}
+  }, []);
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh', width: '100%', position: 'relative', backgroundColor: '#040406' }}>
       <ParticleBackground />
       <Sidebar />
       <FloatingChatbot />
+      <OnboardingModal isOpen={showOnboarding} onClose={() => setShowOnboarding(false)} />
       
       {/* Gotham Bat-Signal Moon Atmospheric Effect on Right Side */}
       <div style={{
