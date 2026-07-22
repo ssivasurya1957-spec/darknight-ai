@@ -10,7 +10,7 @@ export async function POST(request) {
 
     if (!apiKey) {
       return NextResponse.json({
-        reply: `⚠️ **Gemini API Key Required**\n\nTo unlock live 100% real-time AI responses, please enter your Gemini API Key in Vercel Settings or click the key icon at top right to paste your Google AI Studio key (\`AIzaSy...\`).`
+        reply: `⚠️ **Gemini API Key Required**\n\nTo unlock live 100% real-time AI responses, please enter your Gemini API Key in Vercel Settings or paste your Google AI Studio key (\`AIzaSy...\`).`
       });
     }
 
@@ -29,8 +29,8 @@ Guidelines:
 - Recommend specific top companies (Google, Microsoft, Amazon, Upstox, Fiverr, NVIDIA) with real salary ranges in INR/USD.
 - Maintain a sharp, intelligent, professional Batcave / DarkKnight assistant persona.`;
 
-    // Try models in order: gemini-1.5-flash -> gemini-1.5-pro -> gemini-pro
-    const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'];
+    // Active Google AI Studio models (v1beta)
+    const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash-latest', 'gemini-1.5-flash'];
     let lastError = null;
 
     for (const modelName of modelsToTry) {
@@ -42,13 +42,13 @@ Guidelines:
           return NextResponse.json({ reply: text });
         }
       } catch (err) {
-        console.error(`Gemini model ${modelName} failed:`, err);
+        console.error(`Gemini model ${modelName} failed:`, err?.message);
         lastError = err;
       }
     }
 
     return NextResponse.json({
-      reply: `❌ **Gemini AI Call Failed**: ${lastError?.message || 'Invalid API Key'}. Please check your Google AI Studio API key (from https://aistudio.google.com/app/apikey).`
+      reply: `❌ **Gemini AI Call Failed**: ${lastError?.message || 'API Error'}. Please check your Google AI Studio API key (from https://aistudio.google.com/app/apikey).`
     });
 
   } catch (err) {
