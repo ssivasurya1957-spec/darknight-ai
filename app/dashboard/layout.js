@@ -5,6 +5,7 @@ import Sidebar from '@/components/Sidebar';
 import ParticleBackground from '@/components/ParticleBackground';
 import FloatingChatbot from '@/components/FloatingChatbot';
 import OnboardingModal from '@/components/OnboardingModal';
+import AgentConsole from '@/components/AgentConsole';
 
 export default function DashboardLayout({ children }) {
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -25,7 +26,6 @@ export default function DashboardLayout({ children }) {
       <FloatingChatbot />
       <OnboardingModal isOpen={showOnboarding} onClose={() => setShowOnboarding(false)} />
       
-      {/* Gotham Bat-Signal Moon Atmospheric Effect on Right Side */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -43,25 +43,13 @@ export default function DashboardLayout({ children }) {
         minHeight: '100vh',
         overflowY: 'auto',
         zIndex: 10,
-        paddingLeft: '84px', // 84px left padding offset for fixed sidebar
+        paddingLeft: '84px',
         paddingBottom: '80px',
       }}>
-        {/* Top Slogan Banner */}
-        <div style={{
-          textAlign: 'center',
-          padding: '12px 0 4px',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.75rem',
-          letterSpacing: '0.2em',
-          color: 'var(--primary)',
-          fontWeight: 600,
-          textTransform: 'uppercase',
-          borderBottom: '1px solid rgba(212, 175, 55, 0.1)',
-        }}>
-          🦇 NO EXCUSES. ONLY EXECUTION.
-        </div>
+        {/* Top Agent Status Bar */}
+        <AgentConsole />
 
-        <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
+        <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '1400px', margin: '0 auto', padding: '16px 20px 0' }}>
           {children}
         </div>
       </main>

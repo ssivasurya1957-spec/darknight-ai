@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, RefreshCw, ExternalLink, MapPin, Clock, DollarSign, Wifi, Star, Briefcase, Code, Trophy, FlaskConical, Zap, Sparkles, Filter } from 'lucide-react';
+import { Search, RefreshCw, ExternalLink, MapPin, Clock, DollarSign, Wifi, Star, Briefcase, Code, Trophy, FlaskConical, Zap, Sparkles, Send, Bell } from 'lucide-react';
+import ApplyAssistantModal from '@/components/ApplyAssistantModal';
 
 const PLATFORM_COLORS = {
   LinkedIn: '#0A66C2',
@@ -29,18 +30,9 @@ const TYPE_CONFIG = {
 
 const FILTERS = ['All', 'Jobs', 'Internships', 'Hackathons', 'Research', 'Freelance'];
 
-const PLATFORMS_DISPLAY = [
-  { name: 'LinkedIn', color: '#0A66C2' },
-  { name: 'Naukri', color: '#FF7555' },
-  { name: 'Indeed', color: '#2557A7' },
-  { name: 'Internshala', color: '#36A8DA' },
-  { name: 'Devfolio', color: '#5B3CC4' },
-  { name: 'Upwork', color: '#14A800' },
-  { name: 'Fiverr', color: '#1DBF73' },
-  { name: 'Upstox', color: '#8B5CF6' },
-];
+const TARGET_COMPANIES = ['Google', 'Microsoft', 'Amazon', 'Upstox', 'Fiverr', 'Zepto', 'NVIDIA'];
 
-function JobCard({ job, index }) {
+function JobCard({ job, index, onApplyAssistant }) {
   const typeConfig = TYPE_CONFIG[job.type] || TYPE_CONFIG.job;
   const platformColor = PLATFORM_COLORS[job.platform] || '#888';
 
@@ -68,7 +60,6 @@ function JobCard({ job, index }) {
       }}
       whileHover={{ borderColor: 'rgba(212,175,55,0.4)', y: -2 }}
     >
-      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '8px' }}>
@@ -149,12 +140,20 @@ function JobCard({ job, index }) {
       )}
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.05)', gap: '8px' }}>
-        <button
-          onClick={handleAskAI}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '5px 10px', borderRadius: '8px', border: '1px solid rgba(212,175,55,0.3)', background: 'rgba(212,175,55,0.1)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 600, cursor: 'pointer' }}
-        >
-          <Sparkles size={12} /> Ask AI
-        </button>
+        <div style={{ display: 'flex', gap: '6px' }}>
+          <button
+            onClick={handleAskAI}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '5px 10px', borderRadius: '8px', border: '1px solid rgba(212,175,55,0.3)', background: 'rgba(212,175,55,0.1)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 600, cursor: 'pointer' }}
+          >
+            <Sparkles size={12} /> Ask AI
+          </button>
+          <button
+            onClick={() => onApplyAssistant(job)}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '5px 10px', borderRadius: '8px', border: '1px solid rgba(59,130,246,0.3)', background: 'rgba(59,130,246,0.1)', color: '#3B82F6', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 600, cursor: 'pointer' }}
+          >
+            <Send size={12} /> Apply Assistant
+          </button>
+        </div>
 
         <a
           href={job.applyUrl || job.link || '#'}
@@ -163,7 +162,7 @@ function JobCard({ job, index }) {
           onClick={(e) => e.stopPropagation()}
           style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 14px', borderRadius: '8px', background: 'linear-gradient(135deg, #D4AF37, #F5D767)', color: '#000', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 700, textDecoration: 'none' }}
         >
-          Apply Directly <ExternalLink size={11} />
+          Apply <ExternalLink size={11} />
         </a>
       </div>
     </motion.div>
@@ -173,10 +172,11 @@ function JobCard({ job, index }) {
 export default function SearchPage() {
   const [query, setQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
+  const [activeTab, setActiveTab] = useState('preferred'); // 'preferred' | 'explore'
   const [jobs, setJobs] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
-  const [error, setError] = useState('');
+  const [selectedJobForAssistant, setSelectedJobForAssistant] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const debounceRef = useRef(null);
 
@@ -194,7 +194,6 @@ export default function SearchPage() {
       return;
     }
     setIsSearching(true);
-    setError('');
     setHasSearched(true);
 
     try {
@@ -209,10 +208,9 @@ export default function SearchPage() {
       });
 
       const data = await res.json();
-      if (!res.ok || data.error) throw new Error(data.error || 'Search failed');
       setJobs(data.jobs || []);
     } catch (err) {
-      setError('AI job search service active. Showing live opportunities.');
+      console.error(err);
     } finally {
       setIsSearching(false);
     }
@@ -230,27 +228,39 @@ export default function SearchPage() {
 
   return (
     <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '24px 20px 80px' }}>
+      
+      <ApplyAssistantModal
+        isOpen={!!selectedJobForAssistant}
+        onClose={() => setSelectedJobForAssistant(null)}
+        opportunity={selectedJobForAssistant}
+      />
+
       <div style={{ marginBottom: '28px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 800, color: '#F5E6C8', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>
-            🔍 24/7 Realtime AI Job Search & Trends
-          </h1>
-          <span style={{ fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: '#22C55E', padding: '3px 10px', borderRadius: '20px', border: '1px solid rgba(34,197,94,0.3)', background: 'rgba(34,197,94,0.08)' }}>
-            LIVE ENGINE
-          </span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
+          <div>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 800, color: '#F5E6C8', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>
+              🔍 24/7 Agentic Opportunity Scanner
+            </h1>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-secondary)', margin: '4px 0 0' }}>
+              Real-time API & Gemini Agent Aggregator · Scans Google, Microsoft, Amazon, Upstox, Fiverr
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', gap: '6px' }}>
+            {TARGET_COMPANIES.map(c => (
+              <button
+                key={c}
+                onClick={() => { setQuery(c); runSearch(c, activeFilter); }}
+                style={{ padding: '4px 10px', borderRadius: '16px', border: '1px solid rgba(212,175,55,0.2)', background: 'rgba(212,175,55,0.06)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', cursor: 'pointer' }}
+              >
+                + {c} Watchlist
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Platforms Bar */}
-        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
-          {PLATFORMS_DISPLAY.map(p => (
-            <span key={p.name} style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '0.68rem', background: `${p.color}18`, color: p.color, border: `1px solid ${p.color}33`, fontFamily: 'var(--font-mono)' }}>
-              {p.name}
-            </span>
-          ))}
-        </div>
-
-        {/* Search Input */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(10,10,16,0.95)', border: '1px solid rgba(212,175,55,0.25)', borderRadius: '14px', padding: '14px 20px', marginBottom: '14px' }}>
+        {/* Search Bar */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(10,10,16,0.95)', border: '1px solid rgba(212,175,55,0.25)', borderRadius: '14px', padding: '14px 20px', marginBottom: '16px' }}>
           {isSearching
             ? <RefreshCw size={20} style={{ color: '#D4AF37', animation: 'spin 1s linear infinite', flexShrink: 0 }} />
             : <Search size={20} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
@@ -259,29 +269,56 @@ export default function SearchPage() {
             type="text"
             value={query}
             onChange={handleInputChange}
-            placeholder="Type role, skill, or company (e.g., Google, Amazon Data Scientist, Fiverr, Upstox)..."
+            placeholder="Type role, skill, or target company (e.g. Amazon Data Scientist, Google, Upstox, Fiverr)..."
             style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#e8e8e8', fontSize: '1rem', fontFamily: 'inherit' }}
             autoFocus
           />
         </div>
 
-        {/* Filter Chips */}
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          {FILTERS.map(f => (
+        {/* Tabs: Preferred vs Explore All */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+          <div style={{ display: 'flex', gap: '6px', background: 'rgba(0,0,0,0.5)', padding: '4px', borderRadius: '12px', border: '1px solid rgba(212,175,55,0.15)' }}>
             <button
-              key={f}
-              onClick={() => { setActiveFilter(f); if (query.trim()) runSearch(query, f); }}
+              onClick={() => setActiveTab('preferred')}
               style={{
-                padding: '6px 16px', borderRadius: '20px', border: '1px solid',
-                borderColor: activeFilter === f ? '#D4AF37' : 'rgba(255,255,255,0.08)',
-                background: activeFilter === f ? 'rgba(212,175,55,0.15)' : 'transparent',
-                color: activeFilter === f ? '#D4AF37' : 'var(--text-secondary)',
-                fontFamily: 'var(--font-mono)', fontSize: '0.78rem', cursor: 'pointer'
+                padding: '6px 14px', borderRadius: '8px', border: 'none',
+                background: activeTab === 'preferred' ? 'rgba(212,175,55,0.15)' : 'transparent',
+                color: activeTab === 'preferred' ? '#D4AF37' : 'var(--text-secondary)',
+                fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer'
               }}
             >
-              {f}
+              High Match / Preferred
             </button>
-          ))}
+            <button
+              onClick={() => setActiveTab('explore')}
+              style={{
+                padding: '6px 14px', borderRadius: '8px', border: 'none',
+                background: activeTab === 'explore' ? 'rgba(59,130,246,0.15)' : 'transparent',
+                color: activeTab === 'explore' ? '#3B82F6' : 'var(--text-secondary)',
+                fontFamily: 'var(--font-mono)', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer'
+              }}
+            >
+              Explore All / Low Preference Field Bucket
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+            {FILTERS.map(f => (
+              <button
+                key={f}
+                onClick={() => { setActiveFilter(f); if (query.trim()) runSearch(query, f); }}
+                style={{
+                  padding: '5px 12px', borderRadius: '16px', border: '1px solid',
+                  borderColor: activeFilter === f ? '#D4AF37' : 'rgba(255,255,255,0.08)',
+                  background: activeFilter === f ? 'rgba(212,175,55,0.15)' : 'transparent',
+                  color: activeFilter === f ? '#D4AF37' : 'var(--text-secondary)',
+                  fontFamily: 'var(--font-mono)', fontSize: '0.72rem', cursor: 'pointer'
+                }}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -290,13 +327,13 @@ export default function SearchPage() {
         {!hasSearched && (
           <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ textAlign: 'center', paddingTop: '40px' }}>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', color: '#F5E6C8', textTransform: 'uppercase', marginBottom: '8px' }}>
-              Search Any Role, Company, or Domain
+              Search Any Target Role or Company
             </h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', maxWidth: '440px', margin: '0 auto 20px', fontFamily: 'var(--font-mono)' }}>
-              Real-time AI query engine scans hiring boards 24/7 with direct apply links and salary benchmarks.
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', maxWidth: '460px', margin: '0 auto 20px', fontFamily: 'var(--font-mono)' }}>
+              Agentic scanner searches live hiring platforms with direct apply links, salary ranges, and 1-click cover letter assistant.
             </p>
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              {['Amazon Data Scientist', 'Google Core Systems', 'Microsoft ML Engineer', 'Upstox Backend', 'Fiverr AI Specialist', 'React Developer Intern'].map(s => (
+              {['Amazon Data Scientist', 'Google Core Systems', 'Microsoft ML Engineer', 'Upstox FinTech', 'Fiverr AI Specialist'].map(s => (
                 <button key={s} onClick={() => { setQuery(s); runSearch(s, activeFilter); }}
                   style={{ padding: '8px 16px', borderRadius: '20px', border: '1px solid rgba(212,175,55,0.2)', background: 'rgba(212,175,55,0.06)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', cursor: 'pointer' }}>
                   {s}
@@ -310,31 +347,33 @@ export default function SearchPage() {
           <div style={{ textAlign: 'center', paddingTop: '50px' }}>
             <RefreshCw size={32} style={{ color: '#D4AF37', animation: 'spin 1s linear infinite', margin: '0 auto 16px', display: 'block' }} />
             <p style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-              Scanning Google, Microsoft, Amazon, Upstox, Fiverr, LinkedIn 24/7...
+              Scanning live endpoints & Gemini agent across Google, Microsoft, Amazon, Upstox, Fiverr...
             </p>
           </div>
         )}
 
         {hasSearched && !isSearching && (
           <motion.div key="results" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            {/* Primary High-Match Jobs */}
-            <div style={{ marginBottom: '32px' }}>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', color: '#F5E6C8', textTransform: 'uppercase', marginBottom: '14px' }}>
-                🎯 Primary Preference Matches ({highMatchJobs.length})
-              </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '16px' }}>
-                {highMatchJobs.map((job, i) => <JobCard key={job.id || i} job={job} index={i} />)}
-              </div>
-            </div>
-
-            {/* Low Preference / Alternative Fields Section */}
-            {alternativeJobs.length > 0 && (
-              <div style={{ paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '14px' }}>
-                  🌐 Alternative Roles & Low Preference Fields ({alternativeJobs.length})
+            {activeTab === 'preferred' ? (
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', color: '#F5E6C8', textTransform: 'uppercase', marginBottom: '14px' }}>
+                  🎯 Primary Preference Matches ({highMatchJobs.length})
                 </h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '16px' }}>
-                  {alternativeJobs.map((job, i) => <JobCard key={job.id || i} job={job} index={i} />)}
+                  {highMatchJobs.map((job, i) => (
+                    <JobCard key={job.id || i} job={job} index={i} onApplyAssistant={setSelectedJobForAssistant} />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', color: '#3B82F6', textTransform: 'uppercase', marginBottom: '14px' }}>
+                  🌐 Explore All / Low Preference Field Bucket ({alternativeJobs.length})
+                </h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '16px' }}>
+                  {alternativeJobs.map((job, i) => (
+                    <JobCard key={job.id || i} job={job} index={i} onApplyAssistant={setSelectedJobForAssistant} />
+                  ))}
                 </div>
               </div>
             )}

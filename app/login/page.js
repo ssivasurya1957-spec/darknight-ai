@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { signIn } from 'next-auth/react';
-import { User, AlertCircle, Loader2, ArrowRight } from 'lucide-react';
+import { User, AlertCircle, Loader2, ArrowRight, ShieldCheck } from 'lucide-react';
 import ParticleBackground from '@/components/ParticleBackground';
 
 export default function LoginPage() {
@@ -18,7 +18,7 @@ export default function LoginPage() {
     try {
       await signIn('google', { callbackUrl: '/dashboard' });
     } catch (err) {
-      setError('Google Sign-In failed. Please check your network or OAuth configuration.');
+      setError('Google OAuth sign-in error. Check credentials in .env.local.');
       setLoading(null);
     }
   };
@@ -26,7 +26,7 @@ export default function LoginPage() {
   const handleGuestLogin = (e) => {
     e.preventDefault();
     if (!guestName.trim()) {
-      setError('Please enter a username for Guest access.');
+      setError('Please enter your Username for Guest session.');
       return;
     }
     setLoading('guest');
@@ -45,7 +45,6 @@ export default function LoginPage() {
     <div style={S.page}>
       <ParticleBackground />
 
-      {/* Background radial ambient glow */}
       <div style={{ position: 'fixed', top: 0, left: '50%', transform: 'translateX(-50%)', width: '800px', height: '400px', background: 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.1) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 1 }} />
 
       <motion.div
@@ -56,14 +55,15 @@ export default function LoginPage() {
       >
         <div style={S.card}>
 
-          {/* Logo Header */}
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
             <div style={S.bkLogo}>BK</div>
             <h1 style={S.title}>DarkKnight AI</h1>
-            <p style={S.subtitle}>Autonomous Career & Opportunity Intelligence</p>
+            <p style={S.subtitle}>Agentic Opportunity & Career Intelligence Platform</p>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '10px', padding: '3px 10px', borderRadius: '14px', background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.2)', fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: '#D4AF37' }}>
+              <ShieldCheck size={14} /> PROBLEM STATEMENT PS4
+            </div>
           </div>
 
-          {/* Error Banner */}
           <AnimatePresence>
             {error && (
               <motion.div
@@ -78,10 +78,8 @@ export default function LoginPage() {
             )}
           </AnimatePresence>
 
-          {/* Authentication Options (Google & Guest with Username Only) */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            
-            {/* 1. Real Google OAuth Button */}
+            {/* Google OAuth */}
             <button
               onClick={handleGoogleAuth}
               disabled={!!loading}
@@ -106,14 +104,13 @@ export default function LoginPage() {
               <span style={{ fontWeight: 600 }}>{loading === 'google' ? 'Redirecting to Google...' : 'Continue with Google'}</span>
             </button>
 
-            {/* Separator */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '4px 0' }}>
               <span style={{ flex: 1, height: '1px', background: 'rgba(212,175,55,0.12)' }} />
               <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>or</span>
               <span style={{ flex: 1, height: '1px', background: 'rgba(212,175,55,0.12)' }} />
             </div>
 
-            {/* 2. Guest Login with Username */}
+            {/* Guest Mode */}
             {!showGuestForm ? (
               <button
                 onClick={() => setShowGuestForm(true)}
@@ -173,11 +170,10 @@ export default function LoginPage() {
                 </div>
               </form>
             )}
-
           </div>
 
           <p style={{ textAlign: 'center', marginTop: '28px', fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', lineHeight: 1.6 }}>
-            Secured by OAuth 2.0 & NextAuth.js · No passwords stored.
+            Secured by NextAuth.js OAuth 2.0 & Anonymous Session Management.
           </p>
         </div>
       </motion.div>

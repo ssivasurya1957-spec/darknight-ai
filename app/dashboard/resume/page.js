@@ -3,14 +3,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
-import { Download, RefreshCw, Plus, Trash2, Loader2, Sparkles } from 'lucide-react';
-
-const TEMPLATES = ['Modern Dark', 'Classic Clean', 'Tech Minimal'];
+import { Download, RefreshCw, Plus, Trash2, Loader2, Sparkles, Briefcase } from 'lucide-react';
+import { opportunities } from '@/lib/mockData';
 
 export default function ResumePage() {
   const { data: session } = useSession();
-  const [template, setTemplate] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [selectedJobId, setSelectedJobId] = useState('');
   const previewRef = useRef(null);
 
   const [resume, setResume] = useState({
@@ -22,10 +21,10 @@ export default function ResumePage() {
     github: '',
     summary: '',
     education: [{ degree: 'B.Tech Computer Science', institution: 'IIT Delhi', year: '2022–2026', gpa: '8.5/10' }],
-    experience: [{ role: '', company: '', duration: '', points: [''] }],
-    skills: { languages: 'Python, JavaScript, Java', frameworks: 'React, Node.js, FastAPI', tools: 'Git, Docker, AWS, PostgreSQL' },
-    projects: [{ name: '', tech: '', description: '', link: '' }],
-    achievements: [''],
+    experience: [{ role: 'Software Engineer Intern', company: 'Tech Corp', duration: 'May–Aug 2025', points: ['Engineered scalable microservices using Python and React.', 'Optimized PostgreSQL queries reducing latency by 35%.'] }],
+    skills: { languages: 'Python, JavaScript, Go', frameworks: 'React, Node.js, FastAPI', tools: 'Git, Docker, AWS, PostgreSQL' },
+    projects: [{ name: 'DarkKnight AI', tech: 'Next.js, Gemini API, Tailwind', description: 'Autonomous agentic career intelligence platform.', link: 'https://github.com/...' }],
+    achievements: ['Won Smart India Hackathon 2025'],
   });
 
   useEffect(() => {
@@ -42,21 +41,39 @@ export default function ResumePage() {
     localStorage.setItem('resume_data', JSON.stringify(updated));
   };
 
-  const generateWithAI = async () => {
+  const generateTailoredResume = async () => {
     setIsGenerating(true);
+    const targetJob = opportunities.find(o => o.id === selectedJobId) || opportunities[0];
+
     try {
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: [{ role: 'user', content: `Generate a professional 3-sentence resume summary for a ${resume.title} named ${resume.name || 'the user'}. Skills include: ${resume.skills.languages}, ${resume.skills.frameworks}. Keep it concise, impactful, and ATS-optimized.` }],
+          messages: [{
+            role: 'user',
+            content: `Tailor this ATS resume for the target role: "${targetJob.title}" at "${targetJob.organization}" (${targetJob.domain}).
+Required Skills for Job: ${targetJob.skills?.join(', ')}.
+
+Generate an ATS-optimized professional summary (3 lines) and 3 high-impact bullet points matching this Job Description.`
+          }],
           userProfile: { name: resume.name },
         }),
       });
+
       const data = await res.json();
-      if (data.reply) save({ ...resume, summary: data.reply.replace(/^```[\w]*\n?/, '').replace(/```$/, '').trim() });
-    } catch (e) {}
-    setIsGenerating(false);
+      if (data.reply) {
+        save({
+          ...resume,
+          title: targetJob.title,
+          summary: data.reply.replace(/^```[\w]*\n?/, '').replace(/```$/, '').trim()
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const downloadPDF = () => {
@@ -66,7 +83,7 @@ export default function ResumePage() {
       <html>
       <head>
         <meta charset="UTF-8">
-        <title>${resume.name} — Resume</title>
+        <title>${resume.name || 'User'} — ATS Resume</title>
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
           body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; color: #1a1a1a; line-height: 1.5; padding: 32px; max-width: 800px; margin: 0 auto; }
@@ -81,8 +98,6 @@ export default function ResumePage() {
           li { margin-bottom: 2px; }
           .skills-row { display: flex; gap: 8px; margin-bottom: 4px; }
           .skill-label { font-weight: 600; min-width: 80px; }
-          .project-title { font-weight: 600; }
-          .project-tech { color: #555; font-size: 10px; }
           @media print { body { padding: 20px; } }
         </style>
       </head>
@@ -103,8 +118,7 @@ export default function ResumePage() {
         <div class="section-title">Skills</div>
         ${Object.entries(resume.skills).map(([k, v]) => v ? `<div class="skills-row"><span class="skill-label">${k.charAt(0).toUpperCase() + k.slice(1)}:</span><span>${v}</span></div>` : '').join('')}
         ${resume.projects.filter(p => p.name).length > 0 ? `<div class="section-title">Projects</div>
-        ${resume.projects.filter(p => p.name).map(p => `<div style="margin-bottom:8px"><div class="exp-header"><span class="project-title">${p.name}</span>${p.link ? `<a href="${p.link}">${p.link}</a>` : ''}</div>${p.tech ? `<div class="project-tech">${p.tech}</div>` : ''}${p.description ? `<p>${p.description}</p>` : ''}</div>`).join('')}` : ''}
-        ${resume.achievements.filter(Boolean).length > 0 ? `<div class="section-title">Achievements</div><ul>${resume.achievements.filter(Boolean).map(a => `<li>${a}</li>`).join('')}</ul>` : ''}
+        ${resume.projects.filter(p => p.name).map(p => `<div style="margin-bottom:8px"><div class="exp-header"><span>${p.name}</span></div>${p.tech ? `<div style="font-size:10px;color:#555">${p.tech}</div>` : ''}${p.description ? `<p>${p.description}</p>` : ''}</div>`).join('')}` : ''}
       </body>
       </html>
     `);
@@ -127,12 +141,6 @@ export default function ResumePage() {
     save({ ...resume, experience: updated });
   };
 
-  const updateProject = (idx, field, val) => {
-    const updated = [...resume.projects];
-    updated[idx] = { ...updated[idx], [field]: val };
-    save({ ...resume, projects: updated });
-  };
-
   const Field = ({ label, value, onChange, placeholder, multiline }) => (
     <div style={{ marginBottom: '10px' }}>
       <label style={{ display: 'block', fontSize: '0.68rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>{label}</label>
@@ -147,22 +155,37 @@ export default function ResumePage() {
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 20px 80px' }}>
+      
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 800, color: '#F5E6C8', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 4px' }}>
-            📄 Resume Builder
+            📄 AI ATS Resume Studio
           </h1>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-secondary)', margin: 0 }}>
-            Build · AI-enhance · Download as PDF
+            One-Click Job Description Tailoring · Gemini AI Rewrite · Real PDF Export
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button onClick={generateWithAI} disabled={isGenerating}
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 18px', borderRadius: '10px', border: '1px solid rgba(212,175,55,0.3)', background: 'rgba(212,175,55,0.1)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 600 }}>
+
+        {/* Job Tailoring Selector */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <select
+            value={selectedJobId}
+            onChange={e => setSelectedJobId(e.target.value)}
+            style={{ padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(212,175,55,0.25)', background: '#0c0c14', color: '#fff', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', outline: 'none' }}
+          >
+            <option value="">-- Select Target Job Posting --</option>
+            {opportunities.map(o => (
+              <option key={o.id} value={o.id}>{o.title} ({o.organization})</option>
+            ))}
+          </select>
+
+          <button onClick={generateTailoredResume} disabled={isGenerating}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 18px', borderRadius: '10px', border: '1px solid rgba(212,175,55,0.3)', background: 'rgba(212,175,55,0.15)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 600 }}>
             {isGenerating ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <Sparkles size={16} />}
-            AI Summary
+            Tailor for Selected Job
           </button>
+
           <button onClick={downloadPDF}
             style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 18px', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg, #D4AF37, #F5D767)', color: '#000', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', cursor: 'pointer', fontWeight: 700 }}>
             <Download size={16} /> Download PDF
@@ -173,31 +196,27 @@ export default function ResumePage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
         {/* Left: Form */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {/* Personal Info */}
           <Section title="Personal Info">
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              <Field label="Full Name" value={resume.name} onChange={v => save({ ...resume, name: v })} placeholder="Arjun Sharma" />
-              <Field label="Title" value={resume.title} onChange={v => save({ ...resume, title: v })} placeholder="Software Engineer" />
-              <Field label="Email" value={resume.email} onChange={v => save({ ...resume, email: v })} placeholder="arjun@gmail.com" />
+              <Field label="Full Name" value={resume.name} onChange={v => save({ ...resume, name: v })} placeholder="Alex Chen" />
+              <Field label="Target Title" value={resume.title} onChange={v => save({ ...resume, title: v })} placeholder="Software Engineer" />
+              <Field label="Email" value={resume.email} onChange={v => save({ ...resume, email: v })} placeholder="alex@gmail.com" />
               <Field label="Phone" value={resume.phone} onChange={v => save({ ...resume, phone: v })} placeholder="+91 98765 43210" />
-              <Field label="LinkedIn" value={resume.linkedin} onChange={v => save({ ...resume, linkedin: v })} placeholder="linkedin.com/in/arjun" />
-              <Field label="GitHub" value={resume.github} onChange={v => save({ ...resume, github: v })} placeholder="github.com/arjun" />
+              <Field label="LinkedIn" value={resume.linkedin} onChange={v => save({ ...resume, linkedin: v })} placeholder="linkedin.com/in/alex" />
+              <Field label="GitHub" value={resume.github} onChange={v => save({ ...resume, github: v })} placeholder="github.com/alex" />
             </div>
           </Section>
 
-          {/* Summary */}
           <Section title="Professional Summary">
-            <Field label="Summary" value={resume.summary} onChange={v => save({ ...resume, summary: v })} placeholder="Click 'AI Summary' to auto-generate, or write manually..." multiline />
+            <Field label="Summary" value={resume.summary} onChange={v => save({ ...resume, summary: v })} placeholder="Select a job above and click 'Tailor for Selected Job'..." multiline />
           </Section>
 
-          {/* Skills */}
-          <Section title="Skills">
-            <Field label="Programming Languages" value={resume.skills.languages} onChange={v => save({ ...resume, skills: { ...resume.skills, languages: v } })} placeholder="Python, JavaScript, Java, C++" />
-            <Field label="Frameworks & Libraries" value={resume.skills.frameworks} onChange={v => save({ ...resume, skills: { ...resume.skills, frameworks: v } })} placeholder="React, Node.js, FastAPI, TensorFlow" />
-            <Field label="Tools & Platforms" value={resume.skills.tools} onChange={v => save({ ...resume, skills: { ...resume.skills, tools: v } })} placeholder="Git, Docker, AWS, PostgreSQL, Figma" />
+          <Section title="Technical Skills">
+            <Field label="Languages" value={resume.skills.languages} onChange={v => save({ ...resume, skills: { ...resume.skills, languages: v } })} placeholder="Python, JavaScript, C++" />
+            <Field label="Frameworks" value={resume.skills.frameworks} onChange={v => save({ ...resume, skills: { ...resume.skills, frameworks: v } })} placeholder="React, Node.js, FastAPI" />
+            <Field label="Tools & Databases" value={resume.skills.tools} onChange={v => save({ ...resume, skills: { ...resume.skills, tools: v } })} placeholder="Git, Docker, AWS, PostgreSQL" />
           </Section>
 
-          {/* Experience */}
           <Section title="Experience" onAdd={() => save({ ...resume, experience: [...resume.experience, { role: '', company: '', duration: '', points: [''] }] })}>
             {resume.experience.map((exp, idx) => (
               <div key={idx} style={{ borderLeft: '2px solid rgba(212,175,55,0.2)', paddingLeft: '12px', marginBottom: '14px' }}>
@@ -208,7 +227,7 @@ export default function ResumePage() {
                 </div>
                 {exp.points.map((pt, pi) => (
                   <div key={pi} style={{ display: 'flex', gap: '6px', marginBottom: '4px' }}>
-                    <input value={pt} onChange={e => updateExpPoint(idx, pi, e.target.value)} placeholder={`• Achievement ${pi + 1}`}
+                    <input value={pt} onChange={e => updateExpPoint(idx, pi, e.target.value)} placeholder={`• Achievement point ${pi + 1}`}
                       style={{ flex: 1, padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)', color: '#e8e8e8', fontFamily: 'inherit', fontSize: '0.82rem', outline: 'none' }} />
                     <button onClick={() => { const pts = exp.points.filter((_, i) => i !== pi); updateExp(idx, 'points', pts); }}
                       style={{ padding: '4px 8px', borderRadius: '6px', border: 'none', background: 'rgba(239,68,68,0.1)', color: '#ef4444', cursor: 'pointer' }}>
@@ -218,35 +237,7 @@ export default function ResumePage() {
                 ))}
                 <button onClick={() => updateExp(idx, 'points', [...exp.points, ''])}
                   style={{ fontSize: '0.72rem', color: '#D4AF37', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-mono)', padding: '2px 0' }}>
-                  + Add point
-                </button>
-              </div>
-            ))}
-          </Section>
-
-          {/* Projects */}
-          <Section title="Projects" onAdd={() => save({ ...resume, projects: [...resume.projects, { name: '', tech: '', description: '', link: '' }] })}>
-            {resume.projects.map((proj, idx) => (
-              <div key={idx} style={{ borderLeft: '2px solid rgba(59,130,246,0.2)', paddingLeft: '12px', marginBottom: '14px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                  <Field label="Project Name" value={proj.name} onChange={v => updateProject(idx, 'name', v)} placeholder="AI Resume Builder" />
-                  <Field label="Tech Stack" value={proj.tech} onChange={v => updateProject(idx, 'tech', v)} placeholder="React, Python, Gemini" />
-                  <Field label="GitHub/Live Link" value={proj.link} onChange={v => updateProject(idx, 'link', v)} placeholder="github.com/..." />
-                </div>
-                <Field label="Description" value={proj.description} onChange={v => updateProject(idx, 'description', v)} placeholder="Brief 1-2 sentence description..." multiline />
-              </div>
-            ))}
-          </Section>
-
-          {/* Achievements */}
-          <Section title="Achievements" onAdd={() => save({ ...resume, achievements: [...resume.achievements, ''] })}>
-            {resume.achievements.map((ach, idx) => (
-              <div key={idx} style={{ display: 'flex', gap: '6px', marginBottom: '6px' }}>
-                <input value={ach} onChange={e => { const a = [...resume.achievements]; a[idx] = e.target.value; save({ ...resume, achievements: a }); }}
-                  placeholder="Won Smart India Hackathon 2025..." style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)', color: '#e8e8e8', fontFamily: 'inherit', fontSize: '0.82rem', outline: 'none' }} />
-                <button onClick={() => save({ ...resume, achievements: resume.achievements.filter((_, i) => i !== idx) })}
-                  style={{ padding: '6px 10px', borderRadius: '8px', border: 'none', background: 'rgba(239,68,68,0.1)', color: '#ef4444', cursor: 'pointer' }}>
-                  <Trash2 size={14} />
+                  + Add bullet point
                 </button>
               </div>
             ))}
@@ -273,7 +264,7 @@ export default function ResumePage() {
                 {resume.github && <span>⚡ {resume.github}</span>}
               </div>
               {resume.summary && <>
-                <PreviewSection title="Summary" />
+                <PreviewSection title="Professional Summary" />
                 <p style={{ color: '#333', margin: '0 0 8px' }}>{resume.summary}</p>
               </>}
               {resume.education.length > 0 && <>
@@ -286,14 +277,6 @@ export default function ResumePage() {
               </>}
               <PreviewSection title="Skills" />
               {Object.entries(resume.skills).map(([k, v]) => v && <div key={k}><strong>{k}: </strong>{v}</div>)}
-              {resume.projects.filter(p => p.name).length > 0 && <>
-                <PreviewSection title="Projects" />
-                {resume.projects.filter(p => p.name).map((p, i) => <div key={i} style={{ marginBottom: '6px' }}><strong>{p.name}</strong>{p.tech && ` (${p.tech})`}{p.description && <p style={{ margin: '2px 0' }}>{p.description}</p>}</div>)}
-              </>}
-              {resume.achievements.filter(Boolean).length > 0 && <>
-                <PreviewSection title="Achievements" />
-                <ul style={{ paddingLeft: '14px' }}>{resume.achievements.filter(Boolean).map((a, i) => <li key={i}>{a}</li>)}</ul>
-              </>}
             </div>
           </div>
         </div>
