@@ -7,7 +7,7 @@ import GlassCard from './GlassCard';
 import Badge from './Badge';
 
 export default function OpportunityCard({ opportunity, index = 0 }) {
-  const { id, type, domain, title, organization, location, deadline, matchScore } = opportunity;
+  const { id, type, domain, title, organization, location, deadline, stipend, matchScore } = opportunity;
 
   const daysLeft = Math.max(0, Math.ceil((new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24)));
 
@@ -21,13 +21,23 @@ export default function OpportunityCard({ opportunity, index = 0 }) {
     }
   };
 
-  const getBarColor = (type) => {
+  const getBorderColor = (type) => {
     switch (type.toLowerCase()) {
-      case 'hackathon': return 'var(--accent)';
-      case 'internship': return 'var(--primary)';
-      case 'job': return 'var(--success)';
-      case 'research': return '#F59E0B';
-      default: return 'var(--primary)';
+      case 'hackathon': return 'rgba(0, 217, 255, 0.4)';
+      case 'internship': return 'rgba(212, 175, 55, 0.4)';
+      case 'job': return 'rgba(34, 197, 94, 0.4)';
+      case 'research': return 'rgba(243, 156, 18, 0.4)';
+      default: return 'rgba(212, 175, 55, 0.4)';
+    }
+  };
+
+  const getHeaderBarColor = (type) => {
+    switch (type.toLowerCase()) {
+      case 'hackathon': return '#00D9FF';
+      case 'internship': return '#D4AF37';
+      case 'job': return '#22C55E';
+      case 'research': return '#F39C12';
+      default: return '#D4AF37';
     }
   };
 
@@ -38,34 +48,80 @@ export default function OpportunityCard({ opportunity, index = 0 }) {
       transition={{ delay: index * 0.05, duration: 0.4, ease: 'easeOut' }}
     >
       <Link href={`/dashboard/opportunity/${id}`} style={{ textDecoration: 'none' }} className="block h-full">
-        <GlassCard className="relative h-full p-5 flex flex-col cursor-pointer overflow-hidden group border-[rgba(255,255,255,0.08)] hover:border-[rgba(0,217,255,0.3)] transition-all">
-          {/* Top colored bar */}
+        <GlassCard 
+          style={{
+            position: 'relative',
+            height: '100%',
+            padding: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            cursor: 'pointer',
+            overflow: 'hidden',
+            backgroundColor: '#0c0c10',
+            border: `1px solid ${getBorderColor(type)}`,
+            borderRadius: '12px',
+            boxShadow: `0 0 15px ${getBorderColor(type)}1A`,
+            transition: 'all 250ms ease',
+          }}
+          className="group"
+        >
+          {/* Top header glow bar */}
           <div 
-            className="absolute top-0 left-0 right-0 h-1" 
-            style={{ backgroundColor: getBarColor(type) }} 
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '3px',
+              backgroundColor: getHeaderBarColor(type),
+              boxShadow: `0 0 10px ${getHeaderBarColor(type)}`,
+            }} 
           />
           
-          <div className="flex justify-between items-start mb-3 mt-1">
-            <Badge variant={getTypeVariant(type)}>[ {type.toUpperCase()} ]</Badge>
-            <span className="text-[0.7rem] font-mono text-[var(--accent)] tracking-wider uppercase">[ {domain} ]</span>
-          </div>
-          
-          <h3 className="font-display font-semibold text-lg text-white mb-1 group-hover:text-[var(--accent)] transition-colors line-clamp-2">
-            {title}
-          </h3>
-          <p className="text-[var(--text-secondary)] text-xs font-mono mb-5 flex-grow">{organization}</p>
-          
-          <div className="flex items-center justify-between pt-3 border-t border-[rgba(255,255,255,0.05)]">
-            <div className="flex flex-col">
-              <span className="text-[0.65rem] font-mono text-[var(--text-muted)] uppercase">{location}</span>
-              <span className="text-xs font-mono text-[var(--danger)] font-medium">
-                [ DEADLINE: {daysLeft}D ]
+          {/* Category & Domain */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', marginTop: '2px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Badge variant={getTypeVariant(type)}>[ {type.toUpperCase()} ]</Badge>
+              <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', letterSpacing: '0.08em' }}>
+                | &nbsp; {domain.toUpperCase()}
               </span>
             </div>
+          </div>
+          
+          {/* Title */}
+          <h3 style={{
+            fontFamily: 'var(--font-sans)',
+            fontWeight: 700,
+            fontSize: '1.05rem',
+            color: '#ffffff',
+            marginBottom: '4px',
+            lineHeight: 1.3,
+            transition: 'color 200ms ease',
+          }} className="group-hover:text-[var(--primary)] line-clamp-2">
+            {title}
+          </h3>
+
+          {/* Organization & Location */}
+          <p style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', margin: 0, marginBottom: '16px' }}>
+            {organization} &nbsp;•&nbsp; <span style={{ textTransform: 'uppercase', color: 'var(--text-muted)' }}>{location}</span>
+          </p>
+
+          {/* Stipend */}
+          {stipend && (
+            <div style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--primary)', marginBottom: '16px', fontWeight: 600 }}>
+              {stipend}
+            </div>
+          )}
+          
+          {/* Bottom stats row */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', paddingTop: '12px', borderTop: '1px solid rgba(212, 175, 55, 0.1)' }}>
+            <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--danger)', fontWeight: 600 }}>
+              [ DEADLINE: {daysLeft}D ]
+            </span>
             
-            <div className="flex items-center gap-1 bg-[rgba(59,130,246,0.1)] px-2.5 py-1 rounded-md border border-[rgba(59,130,246,0.2)]">
-              <span className="text-[0.65rem] font-mono text-[var(--text-secondary)]">MATCH</span>
-              <span className="text-xs font-mono font-bold text-[var(--primary)]">{matchScore}%</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: 'rgba(212, 175, 55, 0.08)', padding: '3px 8px', borderRadius: '6px', border: '1px solid rgba(212, 175, 55, 0.25)' }}>
+              <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>MATCH</span>
+              <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--primary)' }}>{matchScore}%</span>
             </div>
           </div>
         </GlassCard>

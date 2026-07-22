@@ -3,31 +3,51 @@
 import React from 'react';
 import Sidebar from '@/components/Sidebar';
 import ParticleBackground from '@/components/ParticleBackground';
+import FloatingChatbot from '@/components/FloatingChatbot';
 
 export default function DashboardLayout({ children }) {
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', position: 'relative', backgroundColor: '#050505' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', position: 'relative', backgroundColor: '#040406' }}>
       <ParticleBackground />
       <Sidebar />
+      <FloatingChatbot />
+      
+      {/* Gotham Bat-Signal Moon Atmospheric Effect on Right Side */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        width: '500px',
+        height: '500px',
+        background: 'radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.08) 0%, rgba(13, 13, 18, 0) 70%)',
+        pointerEvents: 'none',
+        zIndex: 1,
+      }} />
+
       <main style={{
         flexGrow: 1,
         position: 'relative',
         minHeight: '100vh',
         overflowY: 'auto',
         zIndex: 10,
-        paddingLeft: '80px', // Explicit 80px offset for fixed sidebar
+        paddingLeft: '84px', // 84px left padding offset for fixed sidebar
         paddingBottom: '80px',
       }}>
+        {/* Top Slogan Banner */}
         <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '150px',
-          background: 'linear-gradient(to bottom, rgba(59,130,246,0.05), transparent)',
-          pointerEvents: 'none',
-          zIndex: 0
-        }} />
+          textAlign: 'center',
+          padding: '12px 0 4px',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.75rem',
+          letterSpacing: '0.2em',
+          color: 'var(--primary)',
+          fontWeight: 600,
+          textTransform: 'uppercase',
+          borderBottom: '1px solid rgba(212, 175, 55, 0.1)',
+        }}>
+          🦇 NO EXCUSES. ONLY EXECUTION.
+        </div>
+
         <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
           {children}
         </div>
