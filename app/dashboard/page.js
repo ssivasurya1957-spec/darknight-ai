@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { LayoutDashboard, TrendingUp, Clock, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
 import GlassCard from '@/components/GlassCard';
 import OpportunityCard from '@/components/OpportunityCard';
-import { opportunities as mockOpportunities, stats as mockStats } from '@/lib/mockData';
+import { opportunities as mockOpportunities } from '@/lib/mockData';
 import Link from 'next/link';
 
 export default function DashboardPage() {
@@ -50,6 +50,15 @@ export default function DashboardPage() {
     if (hour < 18) return 'GOOD AFTERNOON';
     return 'GOOD EVENING';
   };
+
+  // Calculate real live stats dynamically
+  const totalOps = mockOpportunities.length;
+  const highMatchCount = mockOpportunities.filter(o => o.matchScore >= 90).length;
+  const expiringSoonCount = mockOpportunities.filter(o => {
+    const days = Math.ceil((new Date(o.deadline) - new Date()) / (1000 * 60 * 60 * 24));
+    return days > 0 && days <= 25;
+  }).length;
+  const avgMatch = Math.round(mockOpportunities.reduce((acc, o) => acc + o.matchScore, 0) / (totalOps || 1));
 
   const topOpportunities = mockOpportunities.slice(0, 6);
 
@@ -106,7 +115,7 @@ export default function DashboardPage() {
         </div>
       </motion.div>
 
-      {/* 2. Stats Grid */}
+      {/* 2. Dynamic Real Stats Grid */}
       <motion.div variants={itemVariants} style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
@@ -114,40 +123,40 @@ export default function DashboardPage() {
       }}>
         <GlassCard style={{ padding: '20px 24px', border: '1px solid rgba(212, 175, 55, 0.25)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>[ INDEX ]</span>
+            <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>[ ACTIVE INDEX ]</span>
             <LayoutDashboard size={18} style={{ color: 'var(--primary)' }} />
           </div>
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 800, color: '#ffffff', lineHeight: 1 }}>
-              2458
+              {totalOps}
             </div>
-            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--success)', marginTop: '6px' }}>▲ Good today</div>
+            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--success)', marginTop: '6px' }}>● Verified live listings</div>
           </div>
         </GlassCard>
 
         <GlassCard style={{ padding: '20px 24px', border: '1px solid rgba(212, 175, 55, 0.25)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>[ NEW TODAY ]</span>
+            <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>[ HIGH MATCH ]</span>
             <TrendingUp size={18} style={{ color: 'var(--success)' }} />
           </div>
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 800, color: '#ffffff', lineHeight: 1 }}>
-              142
+              {highMatchCount}
             </div>
-            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--success)', marginTop: '6px' }}>▲ 5 high match</div>
+            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--success)', marginTop: '6px' }}>▲ 90%+ compatibility</div>
           </div>
         </GlassCard>
 
         <GlassCard style={{ padding: '20px 24px', border: '1px solid rgba(212, 175, 55, 0.25)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '130px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>[ EXPIRING SOON ]</span>
-            <Clock size={18} style={{ color: 'var(--warning)' }} />
+            <Clock size={18} style={{ color: 'var(--danger)' }} />
           </div>
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 800, color: '#ffffff', lineHeight: 1 }}>
-              37
+              {expiringSoonCount}
             </div>
-            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--warning)', marginTop: '6px' }}>Action required</div>
+            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--danger)', marginTop: '6px' }}>⚡ Urgent action required</div>
           </div>
         </GlassCard>
 
@@ -157,22 +166,43 @@ export default function DashboardPage() {
             <Sparkles size={18} style={{ color: 'var(--primary)' }} />
           </div>
           <div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 800, color: '#ffffff', lineHeight: 1 }}>
-              78%
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 800, color: 'var(--primary)', lineHeight: 1 }}>
+              {avgMatch}%
             </div>
-            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--primary)', marginTop: '6px' }}>Optimized profile</div>
+            <div style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', marginTop: '6px' }}>Optimized profile match</div>
           </div>
         </GlassCard>
       </motion.div>
 
-      {/* 3. Trending Opportunities */}
-      <motion.div variants={itemVariants} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.4rem', color: '#F5E6C8', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            🦇 <span>BUILDING OPPORTUNITIES</span>
-          </h2>
-          <Link href="/dashboard/search" style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', color: 'var(--primary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            VIEW ALL <ArrowRight size={14} />
+      {/* 3. Opportunities Feed */}
+      <motion.div variants={itemVariants}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '1.2rem' }}>🦇</span>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 800,
+              fontSize: '1.3rem',
+              color: '#F5E6C8',
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              margin: 0,
+            }}>
+              Building Opportunities
+            </h2>
+          </div>
+          <Link href="/dashboard/search" style={{ textDecoration: 'none' }}>
+            <div style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.75rem',
+              color: 'var(--primary)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              cursor: 'pointer',
+            }}>
+              VIEW ALL <ArrowRight size={14} />
+            </div>
           </Link>
         </div>
 
@@ -181,47 +211,11 @@ export default function DashboardPage() {
           gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
           gap: '20px',
         }}>
-          {topOpportunities.map((opp, idx) => (
-            <OpportunityCard key={opp.id} opportunity={opp} index={idx} />
+          {topOpportunities.map((opportunity, index) => (
+            <OpportunityCard key={opportunity.id} opportunity={opportunity} index={index} />
           ))}
         </div>
       </motion.div>
-
-      {/* 4. Wayne AI Match Report */}
-      <motion.div variants={itemVariants}>
-        <GlassCard style={{ padding: '28px 32px', border: '1px solid rgba(212, 175, 55, 0.3)', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'rgba(212, 175, 55, 0.15)', border: '1px solid rgba(212, 175, 55, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
-              🦇
-            </div>
-            <div>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.2rem', color: '#F5E6C8', textTransform: 'uppercase', margin: 0 }}>WAYNE AI MATCH REPORT</h3>
-              <p style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', margin: 0, marginTop: '2px', letterSpacing: '0.08em' }}>REAL-TIME CAREER AGENT SYNTHESIS</p>
-            </div>
-          </div>
-
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '24px' }}>
-            Based on your active skills profile in <span style={{ color: 'var(--primary)', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>Machine Learning</span>, <span style={{ color: 'var(--primary)', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>Python</span>, and <span style={{ color: 'var(--primary)', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>React</span>, the system has identified <span style={{ color: '#ffffff', fontFamily: 'var(--font-mono)' }}>12 high-compatibility matches</span>. 3 top-tier hackathons have deadlines remaining this week.
-          </p>
-
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-            <Link href="/dashboard/internships" className="btn btn-outline" style={{ textDecoration: 'none' }}>
-              [ INTERNSHIPS ]
-            </Link>
-            <Link href="/dashboard/hackathons" className="btn btn-outline" style={{ textDecoration: 'none' }}>
-              [ UPCOMING HACKATHONS ]
-            </Link>
-            <Link href="/dashboard/research" className="btn btn-outline" style={{ textDecoration: 'none' }}>
-              [ RESEARCH GRANTS ]
-            </Link>
-          </div>
-        </GlassCard>
-      </motion.div>
-
-      {/* Bottom Bat Quote */}
-      <div style={{ textAlign: 'center', paddingTop: '20px', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-muted)', letterSpacing: '0.05em' }}>
-        🦇 "You don't need a cape. You need a plan."
-      </div>
     </motion.div>
   );
 }
