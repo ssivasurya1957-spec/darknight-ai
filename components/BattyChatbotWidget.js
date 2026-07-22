@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, X, Send, Sparkles, RefreshCw, Minimize2, Maximize2, Heart } from 'lucide-react';
+import { Bot, X, Send, Sparkles, RefreshCw, Minimize2, Maximize2, MapPin, Calculator, FileText } from 'lucide-react';
 
 export default function BattyChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +11,7 @@ export default function BattyChatbotWidget() {
     {
       id: 'welcome',
       role: 'ai',
-      content: `🦇✨ **Batty AI Chatbot Active!**\n\nHi Cutie! I'm your interactive 24/7 Batcave Chatbot. Ask me about live job openings, salary benchmarks, cute hackathons, or ATS resume tailoring! 💖`,
+      content: `🦇⚡️ **BAT AI Assistant Active!**\n\nHi! I'm **BAT AI**. I can build your resume, solve math & logic problems, answer all questions, and give you exact location details for hackathons near you! 💖`,
       timestamp: new Date().toISOString(),
     }
   ]);
@@ -23,13 +23,14 @@ export default function BattyChatbotWidget() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  const handleSend = async () => {
-    if (!input.trim() || isTyping) return;
+  const handleSend = async (textToSend) => {
+    const text = textToSend || input;
+    if (!text.trim() || isTyping) return;
 
     const userMsg = {
       id: `user-${Date.now()}`,
       role: 'user',
-      content: input.trim(),
+      content: text.trim(),
       timestamp: new Date().toISOString(),
     };
 
@@ -49,7 +50,7 @@ export default function BattyChatbotWidget() {
       });
 
       const data = await res.json();
-      const aiReply = data.reply || `🦇 **Batty AI**: Operational! Ask me about jobs, hackathons, or resumes! 💖`;
+      const aiReply = data.reply || `🦇⚡️ **BAT AI**: Ready! Ask me to solve math, build resumes, answer questions, or find hackathons! 💖`;
 
       setMessages(prev => [
         ...prev,
@@ -67,7 +68,7 @@ export default function BattyChatbotWidget() {
         {
           id: `ai-${Date.now()}`,
           role: 'ai',
-          content: `🦇 **Batty AI**: Active! How can I assist your career today, cutie? 💖`,
+          content: `🦇⚡️ **BAT AI**: Active! Ask me math problems, resume tailoring, or nearest hackathon locations! 💖`,
           timestamp: new Date().toISOString(),
         }
       ]);
@@ -78,7 +79,7 @@ export default function BattyChatbotWidget() {
 
   return (
     <>
-      {/* 3D Floating Batty Widget Launcher */}
+      {/* Floating BAT AI Widget Launcher */}
       {!isOpen && (
         <motion.button
           onClick={() => setIsOpen(true)}
@@ -86,31 +87,31 @@ export default function BattyChatbotWidget() {
           animate={{ scale: 1, opacity: 1 }}
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.95 }}
-          className="bat-3d-float"
+          className="vibrant-float"
           style={{
             position: 'fixed',
             bottom: '24px',
             right: '24px',
             zIndex: 999,
-            width: '64px',
-            height: '64px',
+            width: '68px',
+            height: '68px',
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, #FFD700 0%, #D4AF37 50%, #FF2A5F 100%)',
-            border: '3px solid #FFF0B3',
-            boxShadow: '0 10px 25px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 42, 95, 0.4)',
+            background: 'linear-gradient(135deg, #FF007F 0%, #FFD700 50%, #00F5FF 100%)',
+            border: '3px solid #FFFFFF',
+            boxShadow: '0 10px 30px rgba(255, 0, 127, 0.5), 0 0 40px rgba(0, 245, 255, 0.4)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
             color: '#000',
-            fontSize: '1.6rem',
+            fontSize: '1.7rem',
           }}
         >
-          🦇✨
+          🦇⚡️
         </motion.button>
       )}
 
-      {/* 3D Chatbot Modal Window */}
+      {/* BAT AI Chatbot Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -122,45 +123,60 @@ export default function BattyChatbotWidget() {
               bottom: '24px',
               right: '24px',
               zIndex: 1000,
-              width: '380px',
+              width: '400px',
               maxWidth: 'calc(100vw - 32px)',
-              height: isMinimized ? '64px' : '520px',
+              height: isMinimized ? '64px' : '540px',
               maxHeight: 'calc(100vh - 100px)',
-              background: 'linear-gradient(145deg, #191626 0%, #0c0b13 100%)',
-              border: '2px solid rgba(255, 215, 0, 0.4)',
+              background: 'linear-gradient(145deg, #18122b 0%, #0c0817 100%)',
+              border: '2px solid rgba(255, 0, 127, 0.4)',
               borderRadius: '24px',
-              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.95), 0 0 35px rgba(255, 215, 0, 0.25)',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(255, 0, 127, 0.3)',
               display: 'flex',
               flexDirection: 'column',
               overflow: 'hidden',
               transition: 'height 0.3s ease',
             }}
           >
-            {/* Chatbot Header */}
-            <div style={{ padding: '14px 18px', background: 'linear-gradient(90deg, rgba(255,215,0,0.15), rgba(255,42,95,0.15))', borderBottom: '1px solid rgba(255,215,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            {/* BAT AI Header */}
+            <div style={{ padding: '14px 18px', background: 'linear-gradient(90deg, rgba(255,0,127,0.2), rgba(0,245,255,0.2))', borderBottom: '1px solid rgba(255,0,127,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg, #FFD700, #FF2A5F)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', boxShadow: '0 0 12px rgba(255,215,0,0.5)' }}>
-                  🦇
+                <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF007F, #FFD700)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', boxShadow: '0 0 15px rgba(255,0,127,0.6)' }}>
+                  🦇⚡️
                 </div>
                 <div>
-                  <h4 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 800, color: '#FFF0B3', fontFamily: 'var(--font-mono)' }}>
-                    Batty AI Chatbot 💖
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: '#FFF', fontFamily: 'var(--font-display)' }}>
+                    BAT AI 🦇⚡️
                   </h4>
-                  <span style={{ fontSize: '0.68rem', color: '#10B981', fontFamily: 'var(--font-mono)' }}>
-                    ● 24/7 Interactive Copilot
+                  <span style={{ fontSize: '0.68rem', color: '#00F090', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
+                    ● Resumes · Math · Hackathons · All Qs
                   </span>
                 </div>
               </div>
 
               <div style={{ display: 'flex', gap: '6px' }}>
-                <button onClick={() => setIsMinimized(!isMinimized)} style={{ background: 'transparent', border: 'none', color: '#FFF0B3', cursor: 'pointer', padding: '4px' }}>
+                <button onClick={() => setIsMinimized(!isMinimized)} style={{ background: 'transparent', border: 'none', color: '#FFF', cursor: 'pointer', padding: '4px' }}>
                   {isMinimized ? <Maximize2 size={16} /> : <Minimize2 size={16} />}
                 </button>
-                <button onClick={() => setIsOpen(false)} style={{ background: 'transparent', border: 'none', color: '#FF2A5F', cursor: 'pointer', padding: '4px' }}>
+                <button onClick={() => setIsOpen(false)} style={{ background: 'transparent', border: 'none', color: '#FF007F', cursor: 'pointer', padding: '4px' }}>
                   <X size={18} />
                 </button>
               </div>
             </div>
+
+            {/* BAT AI Quick Action Chips */}
+            {!isMinimized && (
+              <div style={{ display: 'flex', gap: '6px', padding: '8px 12px', background: 'rgba(0,0,0,0.4)', overflowX: 'auto', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <button onClick={() => handleSend('Solve math problem step by step')} className="vibrant-badge-gold cursor-pointer" style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
+                  <Calculator size={11} /> Solve Math
+                </button>
+                <button onClick={() => handleSend('Build my ATS resume for target job')} className="vibrant-badge-pink cursor-pointer" style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
+                  <FileText size={11} /> Build Resume
+                </button>
+                <button onClick={() => handleSend('Nearest hackathon location details near me')} className="vibrant-badge-cyan cursor-pointer" style={{ fontSize: '0.68rem', padding: '4px 10px' }}>
+                  <MapPin size={11} /> Nearest Hackathon
+                </button>
+              </div>
+            )}
 
             {/* Chat Messages */}
             {!isMinimized && (
@@ -171,17 +187,17 @@ export default function BattyChatbotWidget() {
                       key={m.id}
                       style={{
                         alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start',
-                        maxWidth: '85%',
+                        maxWidth: '88%',
                         padding: '10px 14px',
                         borderRadius: m.role === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
                         background: m.role === 'user'
-                          ? 'linear-gradient(135deg, rgba(255,215,0,0.25), rgba(255,215,0,0.1))'
-                          : 'rgba(255,255,255,0.05)',
-                        border: m.role === 'user' ? '1px solid rgba(255,215,0,0.4)' : '1px solid rgba(255,255,255,0.1)',
+                          ? 'linear-gradient(135deg, rgba(255,0,127,0.25), rgba(255,215,0,0.15))'
+                          : 'rgba(255,255,255,0.06)',
+                        border: m.role === 'user' ? '1px solid rgba(255,0,127,0.4)' : '1px solid rgba(255,255,255,0.1)',
                         fontSize: '0.82rem',
                         lineHeight: 1.5,
                         color: '#FFF0F5',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
                         whiteSpace: 'pre-line',
                       }}
                     >
@@ -190,30 +206,30 @@ export default function BattyChatbotWidget() {
                   ))}
 
                   {isTyping && (
-                    <div style={{ alignSelf: 'flex-start', padding: '8px 14px', borderRadius: '14px', background: 'rgba(255,255,255,0.05)', display: 'flex', gap: '6px', alignItems: 'center' }}>
-                      <RefreshCw size={14} style={{ color: '#FFD700', animation: 'spin 1s linear infinite' }} />
-                      <span style={{ fontSize: '0.75rem', color: '#FFD700', fontFamily: 'var(--font-mono)' }}>Batty AI is typing...</span>
+                    <div style={{ alignSelf: 'flex-start', padding: '8px 14px', borderRadius: '14px', background: 'rgba(255,255,255,0.06)', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                      <RefreshCw size={14} style={{ color: '#FF007F', animation: 'spin 1s linear infinite' }} />
+                      <span style={{ fontSize: '0.75rem', color: '#FFD700', fontFamily: 'var(--font-mono)' }}>BAT AI is thinking...</span>
                     </div>
                   )}
                   <div ref={messagesEndRef} />
                 </div>
 
                 {/* Input Area */}
-                <div style={{ padding: '10px 12px', borderTop: '1px solid rgba(255,215,0,0.2)', background: '#090810', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <div style={{ padding: '10px 12px', borderTop: '1px solid rgba(255,0,127,0.25)', background: '#090612', display: 'flex', gap: '8px', alignItems: 'center' }}>
                   <input
                     type="text"
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && handleSend()}
-                    placeholder="Ask Batty AI anything..."
-                    style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,215,0,0.25)', borderRadius: '12px', padding: '10px 12px', color: '#fff', fontSize: '0.82rem', outline: 'none' }}
+                    placeholder="Ask BAT AI math, resumes, hackathons, any question..."
+                    style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,0,127,0.3)', borderRadius: '12px', padding: '10px 12px', color: '#fff', fontSize: '0.82rem', outline: 'none' }}
                   />
                   <button
-                    onClick={handleSend}
-                    className="bat-3d-button"
+                    onClick={() => handleSend()}
+                    className="vibrant-btn-pink"
                     style={{ padding: '8px 14px', borderRadius: '12px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}
                   >
-                    <Send size={14} />
+                    Send 🦇
                   </button>
                 </div>
               </>
