@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GraduationCap, Briefcase, MapPin, Sparkles, Check, Building2, Globe } from 'lucide-react';
+import { GraduationCap, Briefcase, MapPin, Sparkles, Check, Building2, Globe, X } from 'lucide-react';
 
 const DOMAINS = ['Artificial Intelligence', 'Web Development', 'Cybersecurity', 'Data Science', 'Cloud Computing', 'FinTech', 'Blockchain'];
 const LOCATIONS = ['Bangalore', 'Delhi NCR', 'Mumbai', 'Hyderabad', 'Pune', 'Remote'];
 const TARGET_COMPANIES = ['Google', 'Microsoft', 'Amazon', 'Upstox', 'Fiverr', 'Zepto', 'NVIDIA'];
 
 export default function OnboardingModal({ isOpen, onClose, onComplete }) {
-  const [role, setRole] = useState('student'); // 'student' | 'jobseeker'
+  const [role, setRole] = useState('student');
   const [selectedDomains, setSelectedDomains] = useState(['Artificial Intelligence', 'Web Development']);
   const [location, setLocation] = useState('Bangalore');
   const [followedCompanies, setFollowedCompanies] = useState(['Google', 'Amazon']);
@@ -39,33 +39,33 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
   return (
     <AnimatePresence>
-      <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          style={{ background: '#0a0a0f', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '24px', padding: '32px', maxWidth: '540px', width: '100%', boxShadow: '0 24px 80px rgba(0,0,0,0.9), 0 0 40px rgba(212,175,55,0.1)' }}
+          style={{ background: '#0a0a0f', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '24px', padding: '24px', maxWidth: '540px', width: '100%', maxHeight: '88vh', overflowY: 'auto', boxShadow: '0 24px 80px rgba(0,0,0,0.9), 0 0 40px rgba(212,175,55,0.1)' }}
         >
-          <div style={{ textAlign: 'center', marginBottom: '24px', position: 'relative' }}>
+          <div style={{ textAlign: 'center', marginBottom: '20px', position: 'relative' }}>
             <button
               onClick={onClose}
-              style={{ position: 'absolute', top: '-10px', right: '-10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text-secondary)', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}
+              style={{ position: 'absolute', top: '0', right: '0', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '4px 10px', borderRadius: '12px', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700 }}
             >
-              ✕
+              OK · SKIP
             </button>
-            <div style={{ display: 'inline-flex', padding: '8px 16px', borderRadius: '20px', background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.3)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', marginBottom: '12px' }}>
+            <div style={{ display: 'inline-flex', padding: '6px 14px', borderRadius: '20px', background: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.3)', color: '#D4AF37', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', marginBottom: '8px' }}>
               <Sparkles size={14} style={{ marginRight: '6px' }} /> PERSONALIZATION ONBOARDING
             </div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', color: '#F5E6C8', textTransform: 'uppercase', margin: '0 0 6px' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', color: '#F5E6C8', textTransform: 'uppercase', margin: '0 0 4px' }}>
               Tailor Your Career Intelligence
             </h2>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', margin: 0 }}>
-              Tell us your status so DarkKnight AI delivers 24/7 real-time opportunities near you.
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', margin: 0 }}>
+              Select your interests below & click OK at the bottom to continue.
             </p>
           </div>
 
           {/* 1. Student vs Job Seeker */}
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: '18px' }}>
             <label style={{ display: 'block', fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: '#D4AF37', textTransform: 'uppercase', marginBottom: '8px' }}>
               1. Are you a Student or Job Seeker?
             </label>
@@ -98,7 +98,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
           </div>
 
           {/* 2. Domains of Interest */}
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: '18px' }}>
             <label style={{ display: 'block', fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: '#D4AF37', textTransform: 'uppercase', marginBottom: '8px' }}>
               2. Select Domain Interests:
             </label>
@@ -122,10 +122,10 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
             </div>
           </div>
 
-          {/* 3. Location for Local Hackathons & Internships */}
-          <div style={{ marginBottom: '20px' }}>
+          {/* 3. Location */}
+          <div style={{ marginBottom: '18px' }}>
             <label style={{ display: 'block', fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: '#D4AF37', textTransform: 'uppercase', marginBottom: '8px' }}>
-              3. Preferred Location (for local hackathons & jobs near you):
+              3. Preferred Location:
             </label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {LOCATIONS.map(loc => (
@@ -147,10 +147,10 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
             </div>
           </div>
 
-          {/* 4. Companies to Follow for Real-time Alert Notification */}
-          <div style={{ marginBottom: '24px' }}>
+          {/* 4. Target Companies */}
+          <div style={{ marginBottom: '20px' }}>
             <label style={{ display: 'block', fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: '#D4AF37', textTransform: 'uppercase', marginBottom: '8px' }}>
-              4. Follow Companies for Instant Vacancy Alerts:
+              4. Follow Companies:
             </label>
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               {TARGET_COMPANIES.map(c => (
@@ -173,11 +173,26 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
             </div>
           </div>
 
+          {/* OK Submit Button */}
           <button
             onClick={handleSave}
-            style={{ width: '100%', padding: '14px', borderRadius: '14px', border: 'none', background: 'linear-gradient(135deg, #D4AF37, #F5D767)', color: '#000', fontFamily: 'var(--font-mono)', fontWeight: 800, fontSize: '0.9rem', cursor: 'pointer', boxShadow: '0 0 20px rgba(212,175,55,0.3)' }}
+            style={{
+              width: '100%',
+              padding: '16px',
+              borderRadius: '16px',
+              border: 'none',
+              background: 'linear-gradient(135deg, #D4AF37 0%, #F5D767 100%)',
+              color: '#000000',
+              fontFamily: 'var(--font-mono)',
+              fontWeight: 900,
+              fontSize: '1rem',
+              letterSpacing: '0.05em',
+              cursor: 'pointer',
+              boxShadow: '0 0 24px rgba(212,175,55,0.4)',
+              textTransform: 'uppercase',
+            }}
           >
-            Save Preferences & Start AI Matching
+            ✓ OK — SAVE PREFERENCES
           </button>
         </motion.div>
       </div>
