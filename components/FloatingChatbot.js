@@ -138,7 +138,7 @@ High-performing developer specializing in ${targetRole}. Demonstrated track reco
       {/* Floating Bot Button (Bottom Right) */}
       <div className="fixed bottom-6 right-6 z-50">
         <button
-          onClick={() => setIsIsOpen(!isOpen)}
+          onClick={() => setIsOpen(!isOpen)}
           className="relative group w-14 h-14 rounded-full bg-[#101015] border border-[rgba(212,175,55,0.4)] flex items-center justify-center text-[#D4AF37] shadow-[0_0_25px_rgba(212,175,55,0.3)] hover:scale-105 transition-all"
         >
           {/* Animated Green Pulse Ring (Matching PS4 Screenshot) */}
