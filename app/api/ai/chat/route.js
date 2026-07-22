@@ -144,9 +144,26 @@ Tone: Powerful, intelligent, encouraging, clear, with a subtle Batcave assistant
         `\`\`\`\n\n` +
         `💡 Code generated with O(N log N) time complexity and memory safety.`;
 
-    // E. Universal Answering Engine
+    // E. Universal Answering Engine (Wikipedia Fallback for General Knowledge)
     } else {
+      try {
+        // Try to answer using Wikipedia if no key is provided and it's a general question
+        const searchQuery = q.replace(/^(what is|who is|explain|tell me about)\s+/i, '').trim();
+        const wikiRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro=true&explaintext=true&titles=${encodeURIComponent(searchQuery)}`);
+        const wikiData = await wikiRes.json();
+        const pages = wikiData?.query?.pages;
+        if (pages) {
+          const pageId = Object.keys(pages)[0];
+          if (pageId !== '-1' && pages[pageId].extract) {
+            const extract = pages[pageId].extract;
+            reply += `Here is what I found for **"${searchQuery}"**:\n\n${extract}\n\n`;
+            return NextResponse.json({ reply, modelUsed: 'bat-ai-wikipedia-fallback' });
+          }
+        }
+      } catch (err) {}
+      
       reply += `I am **BAT AI** 🦇⚡️ — your universal AI assistant.\n\n` +
+        `⚠️ **API KEY ERROR**: The API key you provided (\`AQ...\`) is an OAuth token, not a valid Gemini API Key. To answer complex questions, please generate an **AIzaSy...** key from Google AI Studio and paste it in the header!\n\n` +
         `I am ready to help you with:\n` +
         `• 🧮 **Math & Logic Problem Solving** (Calculus, Algebra, Algorithms, Systems)\n` +
         `• 📍 **Nearest Hackathon Location & Google Maps Navigation**\n` +
